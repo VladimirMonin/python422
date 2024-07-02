@@ -101,23 +101,23 @@ variants = [
 # proverbs_set = set(proverbs)
 # variants_set = set(variants)
 
-result_set = set()
-max_result = len(proverbs) * len(variants)
+# result_set = set()
+# max_result = len(proverbs) * len(variants)
 
-print(f"Возможный максимум пословиц: {max_result}")
-input_num_prowerbs = int(input("Введите количество пословиц: "))
+# print(f"Возможный максимум пословиц: {max_result}")
+# input_num_prowerbs = int(input("Введите количество пословиц: "))
 
-if input_num_prowerbs > max_result:
-    raise ValueError("Слишком большое количество пословиц")
+# if input_num_prowerbs > max_result:
+#     raise ValueError("Слишком большое количество пословиц")
 
-count = 0
-while len(result_set) < input_num_prowerbs:
-    random_proverb = choice(proverbs)
-    random_variant = choice(variants)
-    new_proverb = random_proverb.lower().replace("ум", random_variant).capitalize()
-    result_set.add(new_proverb)
-    count += 1
-    print(f"Итераций: {count}")
+# count = 0
+# while len(result_set) < input_num_prowerbs:
+#     random_proverb = choice(proverbs)
+#     random_variant = choice(variants)
+#     new_proverb = random_proverb.lower().replace("ум", random_variant).capitalize()
+#     result_set.add(new_proverb)
+#     count += 1
+#     print(f"Итераций: {count}")
 
 # Вариант от Константина
 """
