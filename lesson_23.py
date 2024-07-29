@@ -41,12 +41,12 @@ ASCII - 1 байт на символ.
 
 # Как открыть файл txt в Python?
 try:
-    file = open('test.txt',  # имя файла
-                'r', # "флаг" на чтение
-                encoding='utf-8') # кодировка файла. По умолчанию - utf-8
+    file = open(
+        "test.txt", "r", encoding="utf-8"  # имя файла  # "флаг" на чтение
+    )  # кодировка файла. По умолчанию - utf-8
 
-except FileNotFoundError: # FileNotFoundError - ошибка, если файл не найден!
-    print('Файл не найден!')
+except FileNotFoundError:  # FileNotFoundError - ошибка, если файл не найден!
+    print("Файл не найден!")
 
 # Флаги:
 # r - read, чтение
@@ -73,14 +73,14 @@ except FileNotFoundError: # FileNotFoundError - ошибка, если файл 
 # file.close()
 
 # Чтение файла как списка строк
-file = open('test.txt', 'r', encoding='utf-8')
+file = open("test.txt", "r", encoding="utf-8")
 # print(file) # <_io.TextIOWrapper name='test.txt' mode='r' encoding='utf-8'>
 # print(list(file)) # Список строк, как на readlines()
 # print('---------')
 # for item in file: # item - строка
 #     print(item, end='')
 
-print('---------')
+print("---------")
 # print(list(file)) # Пустой список, так как файл уже прочитан и мы провели итерацию по нему
 # lines = file.readlines() # Прочитать строки файла в список
 
@@ -88,29 +88,28 @@ print('---------')
 
 # CRUD - Create, Read, Update, Delete
 
-clean_file = [line.strip() for line in file] # Убрать переносы строк
+clean_file = [line.strip() for line in file]  # Убрать переносы строк
 print(clean_file)
 # print(clean_file)
 
 
-
 file.close()
 
-help(str.strip)
+# help(str.strip)
 
 # контекстный менеджер with
 # with open('test.txt', 'r', encoding='utf-8') as file:
 
-with open('test.txt', 'r', encoding='utf-8') as file:
+with open("test.txt", "r", encoding="utf-8") as file:
     lines = file.readlines()
     print(lines)
 
 # Код вне блока. Файл закрыт!
 
 
-with open('test.txt', 'w', encoding='utf-8') as file:
+with open("test.txt", "w", encoding="utf-8") as file:
     for i in range(1, 11):
-        file.write(f'Привет, мир {i}-й раз!\n')
+        file.write(f"Привет, мир {i}-й раз!\n")
 
 # CSV - Comma Separated Values - значения, разделенные запятыми
 """
@@ -120,10 +119,10 @@ with open('test.txt', 'w', encoding='utf-8') as file:
 
 import csv
 
-with open('data.csv', 'w', encoding='utf-8') as file:
+with open("data.csv", "w", encoding="utf-8") as file:
     writer = csv.writer(file)
-    writer.writerow(['Name', 'Age', 'City'])
-    writer.writerow(['Николай', 30, 'Москва'])
+    writer.writerow(["Name", "Age", "City"])
+    writer.writerow(["Николай", 30, "Москва"])
 
 
 """
@@ -138,19 +137,19 @@ delimiter - разделитель, стандартный для Excel - точ
 windows-1251 - кодировка для Excel
 """
 
-with open('data2.csv', 'w', encoding='utf-8') as file:
-    writer = csv.writer(file, delimiter=';', lineterminator='\n')
-    writer.writerow(['Name', 'Age', 'City'])
-    writer.writerow(['Николай', 30, 'Москва'])
+with open("data2.csv", "w", encoding="utf-8") as file:
+    writer = csv.writer(file, delimiter=";", lineterminator="\n")
+    writer.writerow(["Name", "Age", "City"])
+    writer.writerow(["Николай", 30, "Москва"])
 
 
 # Список списков
 data = [
-    ['Name', 'Age', 'City'],
-    ['Николай', 30, 'Москва'],
-    ['Иван', 25, 'Санкт-Петербург'],
-    ['Мария', 35, 'Казань'],
-    ['Анна', 40, 'Самара']
+    ["Name", "Age", "City"],
+    ["Николай", 30, "Москва"],
+    ["Иван", 25, "Санкт-Петербург"],
+    ["Мария", 35, "Казань"],
+    ["Анна", 40, "Самара"],
 ]
 
 for line in data:
@@ -160,12 +159,44 @@ for line in data:
 # pip install tabulate
 from tabulate import tabulate
 
-print(tabulate(data, tablefmt='grid'))
+# print(tabulate(data, tablefmt='grid'))
 
 # Список словарей
-data = [
-    {'Name': 'Николай', 'Age': 30, 'City': 'Москва'},
-    {'Name': 'Иван', 'Age': 25, 'City': 'Санкт-Петербург'},
-    {'Name': 'Мария', 'Age': 35, 'City': 'Казань'},
-    {'Name': 'Анна', 'Age': 40, 'City': 'Самара'}
+dict_data = [
+    {"Name": "Николай", "Age": 30, "City": "Москва"},
+    {"Name": "Иван", "Age": 25, "City": "Санкт-Петербург"},
+    {"Name": "Мария", "Age": 35, "City": "Казань"},
+    {"Name": "Анна", "Age": 40, "City": "Самара"},
 ]
+
+
+# Запись в CSV списка списков в один заход
+# windows-1251 - используйте её!
+with open("data3.csv", "w", encoding="utf-16") as file:
+    writer = csv.writer(file, delimiter=",", lineterminator="\n")
+    writer.writerows(data)
+
+# Чтение из CSV в список списков
+with open("data3.csv", "r", encoding="utf-16") as file:
+    reader = csv.reader(file, delimiter=",")
+    print(reader)
+    data = list(reader)
+
+
+# print(tabulate(data, tablefmt="grid"))
+
+# Запись в CSV списка словарей
+with open("data4.csv", "w", encoding="utf-16") as file:
+    # columns = ["Name", "Age", "City"] # Заголовки вручную
+    columns = dict_data[0].keys() # Заголовки из первого словаря
+    writer = csv.DictWriter(file, fieldnames=columns, delimiter=",", lineterminator="\n")
+    writer.writeheader() # Записать заголовки
+    writer.writerows(dict_data) # Записать данные
+
+
+# Чтение из CSV в список словарей
+with open("data4.csv", "r", encoding="utf-16") as file:
+    reader = csv.DictReader(file, delimiter=",")
+    data = list(reader)
+
+print(data)
