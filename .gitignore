@@ -2,3 +2,4 @@
 .idea/
 __pycache__*
 lesson_22.txt
+data*.csv

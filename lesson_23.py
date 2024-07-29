@@ -111,3 +111,61 @@ with open('test.txt', 'r', encoding='utf-8') as file:
 with open('test.txt', 'w', encoding='utf-8') as file:
     for i in range(1, 11):
         file.write(f'Привет, мир {i}-й раз!\n')
+
+# CSV - Comma Separated Values - значения, разделенные запятыми
+"""
+Стандарнтный разделитель - запятая
+Кастомный разделитель для Excel - точка с запятой
+"""
+
+import csv
+
+with open('data.csv', 'w', encoding='utf-8') as file:
+    writer = csv.writer(file)
+    writer.writerow(['Name', 'Age', 'City'])
+    writer.writerow(['Николай', 30, 'Москва'])
+
+
+"""
+1. Файл записан через строку
+2. Все данные слиплись в первой ячейке строки
+3. Иероглифы вместо кириллицы
+"""
+
+"""
+lineterminator - символ, который будет вставлен в конце строки
+delimiter - разделитель, стандартный для Excel - точка с запятой
+windows-1251 - кодировка для Excel
+"""
+
+with open('data2.csv', 'w', encoding='utf-8') as file:
+    writer = csv.writer(file, delimiter=';', lineterminator='\n')
+    writer.writerow(['Name', 'Age', 'City'])
+    writer.writerow(['Николай', 30, 'Москва'])
+
+
+# Список списков
+data = [
+    ['Name', 'Age', 'City'],
+    ['Николай', 30, 'Москва'],
+    ['Иван', 25, 'Санкт-Петербург'],
+    ['Мария', 35, 'Казань'],
+    ['Анна', 40, 'Самара']
+]
+
+for line in data:
+    print(line[1])
+
+# печатаем это в tabulate
+# pip install tabulate
+from tabulate import tabulate
+
+print(tabulate(data, tablefmt='grid'))
+
+# Список словарей
+data = [
+    {'Name': 'Николай', 'Age': 30, 'City': 'Москва'},
+    {'Name': 'Иван', 'Age': 25, 'City': 'Санкт-Петербург'},
+    {'Name': 'Мария', 'Age': 35, 'City': 'Казань'},
+    {'Name': 'Анна', 'Age': 40, 'City': 'Самара'}
+]
