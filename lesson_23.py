@@ -74,7 +74,40 @@ except FileNotFoundError: # FileNotFoundError - ошибка, если файл 
 
 # Чтение файла как списка строк
 file = open('test.txt', 'r', encoding='utf-8')
-lines = file.readlines() # Прочитать строки файла в список
-file.close()
-print(lines)
+# print(file) # <_io.TextIOWrapper name='test.txt' mode='r' encoding='utf-8'>
+# print(list(file)) # Список строк, как на readlines()
+# print('---------')
+# for item in file: # item - строка
+#     print(item, end='')
 
+print('---------')
+# print(list(file)) # Пустой список, так как файл уже прочитан и мы провели итерацию по нему
+# lines = file.readlines() # Прочитать строки файла в список
+
+# print(lines)
+
+# CRUD - Create, Read, Update, Delete
+
+clean_file = [line.strip() for line in file] # Убрать переносы строк
+print(clean_file)
+# print(clean_file)
+
+
+
+file.close()
+
+help(str.strip)
+
+# контекстный менеджер with
+# with open('test.txt', 'r', encoding='utf-8') as file:
+
+with open('test.txt', 'r', encoding='utf-8') as file:
+    lines = file.readlines()
+    print(lines)
+
+# Код вне блока. Файл закрыт!
+
+
+with open('test.txt', 'w', encoding='utf-8') as file:
+    for i in range(1, 11):
+        file.write(f'Привет, мир {i}-й раз!\n')
