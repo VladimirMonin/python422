@@ -51,9 +51,30 @@ except FileNotFoundError: # FileNotFoundError - ошибка, если файл 
 # Флаги:
 # r - read, чтение
 # w - write, запись (если файла нет - создаст, если есть - перезапишет)
-# a - append, добавление в конец файла
+# a - append, добавление в конец файла (если файла нет - создаст, если есть - добавит)
 # b - binary, бинарный файл (картинки, видео, музыка)
 
 # Запись в файл
 
-file = open('test.txt', 'w', encoding='utf-8')
+# file = open('test.txt', 'a', encoding='utf-8')
+# file.write('Привет, мир!\n')
+# file.write('Привет, мир!\n')
+# file.write('Привет, мир!\n')
+# file.write('Привет, мир!\n')
+# file.write('Привет, мир!\n')
+# file.write('Привет, мир!\n')
+# file.write('Привет, мир!\n')
+# file.close()
+
+# file = open('test.txt', 'w', encoding='utf-8')
+# for i in range(1, 11):
+#    file.write(f'Привет, мир {i}-й раз!\n')
+
+# file.close()
+
+# Чтение файла как списка строк
+file = open('test.txt', 'r', encoding='utf-8')
+lines = file.readlines() # Прочитать строки файла в список
+file.close()
+print(lines)
+
