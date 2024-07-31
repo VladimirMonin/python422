@@ -11,6 +11,8 @@ Picle - ?
 """
 import json
 from pprint import pprint
+from weather_api import API_KEY
+import requests
 
 FILE = "./data/lesson_24.json"
 
@@ -90,3 +92,64 @@ with open(FILE, "r", encoding="utf-8") as file:
 
 
 pprint(data)
+
+# Команда обнволения pip - pip install --upgrade pip
+
+############################ OPEN WEATHER API и JSON ############################
+# https://openweathermap.org/current
+
+city = input("Введите город: ")
+units = "metric"
+lang = "ru"
+
+url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units={units}&lang={lang}"
+
+print(url)
+
+response = requests.get(url)
+
+print(response)
+
+"""
+Что есть в объекте response:
+.status_code - статус код
+    200 - все ок
+    404 - страница не найдена
+    403 - доступ запрещен
+.text - текст ответа
+.json() - преобразование в JSON
+.headers - заголовки
+.cookies - куки
+.url - URL
+"""
+
+# print(f'Статус код: {response.status_code}')
+# print(f'Текст ответа: {response.text}')
+# print(f'Применение .json: {response.json()}')
+# print(f'Заголовки: {response.headers}')
+# print(f'Куки: {response.cookies}')
+# print(f'URL: {response.url}')
+
+weather_data = response.json()
+# pprint(weather_data)
+# Разбираем данные, которые нам понадобятся
+"""
+["name"] - название города
+["weather"][0]["description"] - описание погоды
+["main"]["temp"] - температура
+["main"]["feels_like"] - ощущается как
+["main"]["humidity"] - влажность
+["wind"]["speed"] - скорость ветра
+"""
+
+final_weather_data = {
+    "город": weather_data["name"],
+    "погода": weather_data["weather"][0]["description"],
+    "температура": weather_data["main"]["temp"],
+    "ощущается как": weather_data["main"]["feels_like"],
+    "влажность": weather_data["main"]["humidity"],
+    "скорость ветра": weather_data["wind"]["speed"],
+
+}
+
+pprint(final_weather_data, sort_dicts=False)
