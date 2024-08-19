@@ -50,3 +50,56 @@ SRP - Single Responsibility Principle - Принцип единственной 
 # hello()
 # result = hello()
 # print(result)
+
+# Параметры функции - это переменные, которые передаются в функцию при ее вызове
+
+# Пример функции с параметром
+from unittest import result
+
+
+def hello(name):
+    return f"Привет, {name}!"
+
+# Вызов функции с параметром
+result = hello("Мир")
+result2 = hello([])
+
+# Проверка типов данных
+
+def hello(name):
+    if not isinstance(name, str):
+        raise TypeError("Имя должно быть строкой")
+    return f"Привет, {name}!"
+
+result = hello('')
+
+"""
+1. Объявите функцию get_sum которая принимает два аргумента a и b и возвращает их сумму
+2. Объявите функцию main которая использует input() для получения двух чисел от пользователя. 
+3. После этого вызовите функцию get_sum и передайте в нее полученные числа. Результат выполнения функции get_sum выведите на экран
+"""
+
+def get_sum(a, b):
+    return a + b
+
+
+def main():
+    user_input = input("Введите два числа через пробел: ").split()
+    try:
+        a, b = [int(i) for i in user_input]
+    except ValueError:
+        print("Введите числа")
+        return
+    
+    result = get_sum(a, b)
+    print(result)
+
+
+# Делаем так, чтобы это выполнялось только если файл запущен напрямую
+# Если код импортирован в другой файл, то код ниже выполнен не будет
+# Потому что запуская его в другом месте, мы получим __name__ = lesson_25
+name_25 = __name__
+print(name_25)
+
+if name_25 == "__main__":
+    main()
