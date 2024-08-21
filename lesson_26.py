@@ -119,7 +119,9 @@ def print_person_info(name, age, hobbie):
     print(f'Имя: {name}, Возраст: {age}, Хобби: {hobbie}')
 
 
-print_person_info(person_dict['name'], person_dict['age'], person_dict['hobbie'])
+print_person_info(name=person_dict['name'],
+                  age= person_dict['age'], 
+                  hobbie= person_dict['hobbie'])
 """
 Распаковка произойдет следующим образом
 **person_dict
@@ -201,3 +203,35 @@ def get_student_data(name, last_name, age, profession, fac):
 [print(get_student_data(**student)) for student in students]
 
 data = [get_student_data(**student) for student in students]
+
+
+# Простой пример с функцией **kwargs
+
+def simple_kwargs(**kwargs):
+    print(kwargs)
+    print(type(kwargs))
+    for key, value in kwargs.items():
+        print(f'ключ: {key}, значение: {value}')
+
+simple_dict = {
+    'a': 1,
+    'b': 2,
+    'c': 3
+}
+
+simple_kwargs(**simple_dict)
+
+# Порядок указания всех типов аргументов
+"""
+1. Обязательные аргументы
+2. *args
+3. Аргументы по-умолчанию
+4. **kwargs
+"""
+
+# функция со всеми типами аргументов
+
+def example_func(a, b, *args, c=1, d=2, **kwargs):
+    print(a, b, args, c, d, kwargs)
+
+example_func(11, 22, 33, name='John', age=25)
