@@ -143,7 +143,7 @@ weather_data = response.json()
 ["wind"]["speed"] - скорость ветра
 """
 # Дата время - импорт
-from datetime import datetime
+
 
 final_weather_data = {
     "дата": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -182,3 +182,4 @@ all_weather.append(final_weather_data)
 # 3. Записываю в файл
 with open(FILE, "w", encoding="utf-8") as file:
     json.dump(all_weather, file, ensure_ascii=False, indent=4)
+from datetime import datetime

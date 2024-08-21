@@ -1,21 +1,35 @@
-from lesson_25 import *
-# Правила наименования функций
-# get_item_by_id   get_item_by_slug  get_name_by_id
-# check_user_by_id  check_user_by_slug  check_user_by_name
-# позиционность!
-kwargs_print = {
-    "sep": "\n",
-    "end": "\n\n"
-}
+"""
+Lesson 26. Функции
+- Правила наименования функций
+- Типы аргументов:
+   - Позиционные
+   - Именованные
+   - Звездочка
+   - Две звезды
+"""
+# def
+"""
+Правила наименования функций
 
-name_dict = {
-    "name": "Vladimir",
-    "last_name": "Monin",
-    "age": 30,
-    "city": "Moscow"
-}
+- Имя функции должно быть осмысленным
+- Имя функции должно быть в нижнем регистре
+- snack_case - каждое слово с маленькой буквы разделенное подчеркиванием
+- начинается как правило с глагола
+- не должно начинаться с цифры
+- не должено содержать специальных символов
+- не должно содержать пробелов
 
+get_user_by_id
+get_user_by_name
+get_user_by_email
+"""
 
-print(1, sep="\n", end="\n\n")
+# Типы аргументов:
+def get_hello_message(name, message):
+    return f"{name}{message}"
 
-print(1, **kwargs_print)
+name_data = "Денис."
+message_data = "Рад тебя видеть!"
+
+print(get_hello_message(name_data, message_data))
+print(get_hello_message(message_data, name_data))
