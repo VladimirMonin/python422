@@ -73,4 +73,20 @@ print(get_full_name(name=name, surname=surname))
 print(get_full_name(surname=surname, name=name))
 
 
-# 
+# Аргументы по-умолчанию
+def get_hello_message2(name, message="Привет!"):
+    return f"{name}{message}"
+
+print(get_hello_message2(name_data))
+print(get_hello_message2(name_data, message_data))
+
+PASSWORD = "123456"
+LOGIN = "admin"
+
+def get_login(login=LOGIN, password=PASSWORD):
+    print(f'Логинимся под пользователем {login} и паролем {password}')
+    SECRET = 'secret'
+
+get_login('логин', 'пароль')
+get_login(login='логин', password='пароль')
+get_login()
