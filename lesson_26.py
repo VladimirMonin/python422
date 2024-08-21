@@ -90,3 +90,20 @@ def get_login(login=LOGIN, password=PASSWORD):
 get_login('логин', 'пароль')
 get_login(login='логин', password='пароль')
 get_login()
+
+# *args - это аргументы, которые передаются в функцию в виде списка
+"""
+Когда мы описываем функцию, и пишем параметр где перед ним стоит *
+Мы предполагаем, что туда может попасть N аргументов
+И просим Пайтон упаковать их в список
+"""
+
+def print_upper_words(*args):
+    for word in args:
+        print(word.upper())
+
+print_upper_words('a', 'b', 'c')
+letters_list = ['a', 'b', 'c']
+print_upper_words(letters_list[0], letters_list[1], letters_list[2])
+print_upper_words(*letters_list)
+
