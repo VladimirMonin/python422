@@ -25,7 +25,13 @@ get_user_by_email
 """
 
 # Типы аргументов:
+# Позиционные аргументы - это аргументы, которые передаются в функцию в определенном порядке
 def get_hello_message(name, message):
+    """
+    Краткое, но ёмкое описание функции
+    :param name: Имя пользователя
+    :param message: Сообщение
+    """
     return f"{name}{message}"
 
 name_data = "Денис."
@@ -33,3 +39,7 @@ message_data = "Рад тебя видеть!"
 
 print(get_hello_message(name_data, message_data))
 print(get_hello_message(message_data, name_data))
+
+
+# get_hello_message(name_data)
+# get_hello_message(name_data, name_data, message_data)
