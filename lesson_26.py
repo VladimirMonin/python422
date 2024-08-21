@@ -34,7 +34,7 @@ def get_hello_message(name, message):
     """
     return f"{name}{message}"
 
-name_data = "Денис."
+name_data = "Спартак."
 message_data = "Рад тебя видеть!"
 
 print(get_hello_message(name_data, message_data))
@@ -43,3 +43,34 @@ print(get_hello_message(message_data, name_data))
 
 # get_hello_message(name_data)
 # get_hello_message(name_data, name_data, message_data)
+
+# Именованные аргументы - это аргументы, которые передаются в функцию в виде пары ключ: значение
+print(get_hello_message(message=message_data, name=name_data))
+print(get_hello_message(name=name_data, message=message_data))
+
+"""
+Практика!
+Напишите функцию, которая принимает два аргумента:
+- Имя
+- Фамилия
+И выводит строку, Имя: {имя}. Фамилия: {фамилия}
+Попробуйте вызвать её 4 разаза:
+1. Аргументы как положено
+2. Поменяйте их иместами
+3. Передайте их в виде именованных аргументов (имя=имя, фамилия=фамилия)
+4. Передайте именнованные аргументы в ином порядке (фамилия=фамилия, имя=имя)
+"""
+
+def get_full_name(name, surname):
+    return f"Имя: {name}. Фамилия: {surname}"
+
+name = 'Иван'
+surname = 'Иванов'
+
+print(get_full_name(name, surname))
+print(get_full_name(surname, name)) # Сбой!)
+print(get_full_name(name=name, surname=surname))
+print(get_full_name(surname=surname, name=name))
+
+
+# 
