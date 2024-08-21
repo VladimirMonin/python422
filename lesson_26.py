@@ -107,3 +107,33 @@ letters_list = ['a', 'b', 'c']
 print_upper_words(letters_list[0], letters_list[1], letters_list[2])
 print_upper_words(*letters_list)
 
+# **kwargs - это аргументы, которые передаются в функцию в виде словаря
+
+person_dict = {
+    'name': 'Константин',
+    'age': 25,
+    'hobbie': 'программирование'
+}
+
+def print_person_info(name, age, hobbie):
+    print(f'Имя: {name}, Возраст: {age}, Хобби: {hobbie}')
+
+
+print_person_info(person_dict['name'], person_dict['age'], person_dict['hobbie'])
+"""
+Распаковка произойдет следующим образом
+**person_dict
+name = person_dict['name']
+age = person_dict['age']
+hobbie = person_dict['hobbie']
+"""
+print_person_info(**person_dict)
+# print(**person_dict) # Ошибка! Он не ждёт именнованных аргументов name,  age, hobbie
+
+print_config = {
+    'sep': '|',
+    'end': '++'
+}
+
+# print('a', 'b', 'c', **print_config)
+print(*letters_list,  **print_config)
