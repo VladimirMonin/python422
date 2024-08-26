@@ -1,5 +1,5 @@
 from lesson_19_1 import * # Буквально копирование!
-from data.cities import cities_list
+from dataset.cities import cities_list
 # get_message()
 
 # Отлично)

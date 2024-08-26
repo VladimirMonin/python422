@@ -23,8 +23,6 @@
 # Выглядит как копирование ВСЕГО ФАЙЛА lesson_16.py
 # print(lesson_16.MESSAGE)
 from pprint import pprint
-import re
-from lesson_16 import MESSAGE as msg, flugen_genhimen as fg
 # print(msg)
 
 # Самый не безопасный способ импорта
@@ -33,7 +31,7 @@ from lesson_16 import MESSAGE as msg, flugen_genhimen as fg
 # print(MESSAGE)
 
 # Импорт marvel
-from data.marvel import small_dict, full_dict
+from dataset.marvel import full_dict
 
 # print(small_dict)
 

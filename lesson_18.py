@@ -1,8 +1,7 @@
 # Lesson 18
 # Словари
 
-from data.marvel import small_dict, full_dict
-from data.cities import cities_list
+from dataset.cities import cities_list
 from pprint import pprint
 
 # TODO: 1. Найдем фильмы по диапазону годов
