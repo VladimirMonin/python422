@@ -1,17 +1,40 @@
 """
 Lesson 27
-Typing - модуль для сложной, детальной аннотации типов
+Typing - модуль для сложной, детальной аннотации типов ????
 """
-from typing import List, Dict, Tuple, Set, Union, Optional
-# Аннотации типов с указанием типов данных в коллекциях
+a = 5
+print(f'{a=}') # Отладочная строка. Выведет a=5
 
-"""
-List[int] - список целых чисел
-List[Optional[int]] - список целых чисел или None
-List[Union[int, str]] - список целых чисел или строк
+# Функция со всеми типами аргументов
 
-Dict[str, int] - словарь, где ключи - строки, а значения - целые числа
-Dict[str, Union[int, str]] - словарь, где ключи - строки, а значения - целые числа или строки
+def example_func(a, b, *args, c=1, d=2, **kwargs):
+    print(a, b, args, c, d, kwargs)
 
-# ТЕСТОВЫЕ ИЗМЕНЕНИЯ ДЛЯ КОММИТА
-"""
+
+def get_four_arg(a, b, c, d):
+    print(f"{a=} {b=} {c=} {d=}")
+
+
+a = 1
+b = 2
+c = 3
+d = 4
+
+get_four_arg(a, b, c, d)
+get_four_arg(a, b, c=c, d=d)
+# get_four_arg(c, d, a=a, b=b)
+get_four_arg(d, d=a, b=c, c=b)
+get_four_arg(d=a, b=c,a=d, c=b)
+
+arg = [a, b, c, d]
+kwarg = {"d": d, "c": c, "b": b, "a": a}
+
+get_four_arg(*arg) # 1, 2, 3, 4,
+get_four_arg(**kwarg) # 4, 3, 2, 1
+
+def get_four_arg2(**kwargs):
+    print(f"{kwargs=}")
+
+
+get_four_arg2(a=a, b=b, c=c, d=d)
+get_four_arg2(**kwarg)
