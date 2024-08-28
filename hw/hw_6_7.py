@@ -134,6 +134,9 @@ def computer_step(
 
   
 def main():
+
+    # ПОИСК СЕТА ПЛОХИХ БУКВ.
+
     computer_city = ''
 
     cities_list = read_json(JSON_FILE)
@@ -146,11 +149,13 @@ def main():
         # Если человек не проиграл
         if human_city:
             cities_set.remove(human_city)
+            # ПЕРЕСЧЕТ СЕТА ПЛОХИХ БУКВ (ОБЛЕГЧИТ РАБОТУ ЧЕЛОВЕКА)
             computer_city = computer_step(cities_set, human_city)
             
             # Если компьютер не проиграл
             if computer_city:
                 cities_set.remove(computer_city)
+                # ПЕРЕСЧЕТ СЕТА ПЛОХИХ БУКВ (ОБЛЕГЧИТ РАБОТУ КОМПЬЮТЕРА)
             
             # Если компьютер проиграл
             else:
