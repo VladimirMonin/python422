@@ -6,7 +6,7 @@ Lesson 28 - Тема: Функции Ч4. Анонимные функции. З�
 - Ключевое слово "lambda"
 - Map
 - Filter
-- Sorted
+- Sorted ???
 - Альтернатива однострочников?
 - Typing 
 - Mypy
@@ -75,3 +75,18 @@ result = [item.upper() for item in shop_list]
 Делим его на список по пробелу
 Ваша задача обойти его map и lambda для получения списка чисел
 """
+
+user_nums = input("Введите числа через пробел: ").split()
+result = list(map(lambda x: int(x), user_nums))
+print(result)
+result = list(map(int, input("Введите числа через пробел: ").split()))
+print(result)
+
+result = [int(num) for num in input("Введите числа через пробел: ").split()]
+
+
+list_list_nums = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
+sum_list_nums = list(map(sum, list_list_nums))
+
+print(sum_list_nums)
