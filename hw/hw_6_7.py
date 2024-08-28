@@ -73,6 +73,66 @@ def get_random_sleep(
     """
     time.sleep(randint(min_time, max_time))
 
+# Сделаем 2 функции. Ход человека и ход компьютера.
+# Они будут инкапсулировать логику каждого хода и возвращать bool
+# Функция main подготовит данные и будет вызвать их по очереди.
+
+
+def human_step(
+    cities_set: set, computer_city: str = "", messages_dict: dict = MESSAGES_DICT) -> str:
+    """
+    Ход человека
+    """
+    human_city = input(MESSAGES_DICT["input_prompt"])
+    
+    # Проверка что город в датасете
+    if is_city_in_set(human_city, cities_set):
+        print(MESSAGES_DICT["city_in_dataset"])
+    
+    # Прогирыш. Город не в датасете
+    else:
+        print(MESSAGES_DICT["city_not_in_dataset"], MESSAGES_DICT["human_lose"])
+        
+        return human_city
+    
+    # Был ли ход компьютера?
+    if computer_city:
+        # Проверка правил игры
+        if check_city_rules(computer_city, human_city):
+            print(MESSAGES_DICT["computer_choice"])
+            return human_city
+        
+        # Первая буква НЕ правильная
+        else:
+            print(MESSAGES_DICT["wrong_letter"], MESSAGES_DICT["human_lose"])
+            return ''
+        
+    # Первый ход - хода еще не было
+    return human_city
+
+
+
+def computer_step(
+    cities_set: set, human_city: str = "", messages_dict: dict = MESSAGES_DICT
+) -> str:
+    """
+    Ход компьютера
+    """
+    print(MESSAGES_DICT["computer_step"])
+    get_random_sleep()
+    
+    computer_city = ''
+    for city in cities_set:
+            if check_city_rules(human_city, city):
+                computer_city = city
+                print(f"{MESSAGES_DICT['computer_choice']} {computer_city}")
+                return computer_city
+    else:
+        # Eсли в цикле не отработал break мы попадем сюда
+        print(MESSAGES_DICT["computer_lose"])
+        return ''
+
+  
 def main():
     computer_city = ''
 
@@ -81,45 +141,27 @@ def main():
 
     while True:
         # ХОД ЧЕЛОВЕКА
+        human_city = human_step(cities_set, computer_city)
 
-        # Ввод города
-        human_city = input(MESSAGES_DICT["input_prompt"])
-        
-        # Проверка города. Есть ли он в датасете?
-        if is_city_in_set(human_city, cities_set):
-            print(MESSAGES_DICT["city_in_dataset"])
-        
-        else:
-            print(MESSAGES_DICT["city_not_in_dataset"], MESSAGES_DICT["human_lose"])
-        
-            break
-
-        # Проверка а был ли ход компьютера?
-        if computer_city:
-            # Ход был. Надо проверять условия игры
-            if check_city_rules(computer_city, human_city):
-                    print(MESSAGES_DICT["computer_step"])
-
+        # Если человек не проиграл
+        if human_city:
+            cities_set.remove(human_city)
+            computer_city = computer_step(cities_set, human_city)
+            
+            # Если компьютер не проиграл
+            if computer_city:
+                cities_set.remove(computer_city)
+            
+            # Если компьютер проиграл
             else:
-                    print(f"{MESSAGES_DICT['wrong_letter']} {computer_city[-1].upper()}")
-                    break
-
-        # ХОД КОМПЬЮТЕРА
-
-        # 1. Перебор сета с городами, с поиском подходящего под правила игры города
-        get_random_sleep()
-        
-
-        for city in cities_set:
-            if check_city_rules(human_city, city):
-                computer_city = city
-                print(f"{MESSAGES_DICT['computer_choice']} {computer_city}")
                 break
+        # Если человек проиграл
         else:
-            # Eсли в цикле не отработал break мы попадем сюда
-            print(MESSAGES_DICT["computer_lose"])
             break
 
+
+
+    
         
 if __name__ == "__main__":
     main()
