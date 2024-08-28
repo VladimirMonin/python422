@@ -111,7 +111,6 @@ def human_step(
     return human_city
 
 
-
 def computer_step(
     cities_set: set, human_city: str = "", messages_dict: dict = MESSAGES_DICT
 ) -> str:
