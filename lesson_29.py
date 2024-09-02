@@ -147,7 +147,7 @@ for item in nums_product_list:
 Возвращает коллекцию, состоящую из элементов, которые прошли фильтр
 """
 
-nums_product_list = ["хлеб", "молоко", "яйца", "масло", "сыр", "колбаса", 2, 4, 55, 'None', None]
+nums_product_list = ["хлеб", "молоко", "яйца", "масло", "сыр", "колбаса", 4, 55, 'None', None]
 
 def my_filter(func: Callable, iter_obj: Iterable) -> Iterable:
     result = []
