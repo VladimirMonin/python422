@@ -147,7 +147,7 @@ for item in nums_product_list:
 Возвращает коллекцию, состоящую из элементов, которые прошли фильтр
 """
 
-nums_product_list = ["хлеб", "молоко", "яйца", "масло", "сыр", "колбаса", 4, 55, 'None', None]
+nums_product_list = ["хлеб", "молоко", "яйца", "масло", "сыр", "колбаса", 4, 55, None]
 
 def my_filter(func: Callable, iter_obj: Iterable) -> Iterable:
     result = []
@@ -159,3 +159,43 @@ def my_filter(func: Callable, iter_obj: Iterable) -> Iterable:
 
 print(my_filter(string_filter, nums_product_list))
 print(type(None))
+
+
+# Используем встроенную функцию filter
+result = list(filter(string_filter, nums_product_list))
+print(result)
+
+
+"""
+Обработаем пользовательский ввод
+Предположим, что пользователь вводит числа через пробел
+Нам надо отфильтровать их, чтобы оставить только числа
+Потом применить к ним int через map и полчить список чисел
+
+1. Ввод пользователя
+2. Превращаем в список
+3. Фильтруем с помощью filter и is_digit
+4. Применяем map с int
+5. Получаем список чисел и выводим на экран
+
+* Попробуйте сделать и фильтр и map в одной строке
+
+** Попробуйте вообще все сделать в одной строке
+"""
+
+user_input = input("Введите числа через пробел: ").split()
+# filtered_user_input = filter(lambda x: x.isdigit(), user_input)
+# nums_list = list(map(int, filtered_user_input))
+# print(nums_list)
+
+# Вариант с map и filter в одной строке
+filtered_nums = list(map(int, filter(lambda x: x.isdigit(), user_input)))
+# Списковое выражение
+filtered_nums = [int(item) for item in user_input if item.isdigit()]
+print(feltered_nums)
+
+# Вообще всё в одной строке
+print(list(map(int, filter(lambda x: x.isdigit(), input("Введите числа ерез пробел".split())))))
+
+# А теперь через list comprehension
+print([int(item) for item in input("Введите числа через пробел: ").split() if item.isdigit()])
