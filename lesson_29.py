@@ -183,19 +183,65 @@ print(result)
 ** Попробуйте вообще все сделать в одной строке
 """
 
-user_input = input("Введите числа через пробел: ").split()
-# filtered_user_input = filter(lambda x: x.isdigit(), user_input)
-# nums_list = list(map(int, filtered_user_input))
-# print(nums_list)
+# user_input = input("Введите числа через пробел: ").split()
+# # filtered_user_input = filter(lambda x: x.isdigit(), user_input)
+# # nums_list = list(map(int, filtered_user_input))
+# # print(nums_list)
 
-# Вариант с map и filter в одной строке
+# # Вариант с map и filter в одной строке
 filtered_nums = list(map(int, filter(lambda x: x.isdigit(), user_input)))
-# Списковое выражение
-filtered_nums = [int(item) for item in user_input if item.isdigit()]
-print(feltered_nums)
+# # Списковое выражение
+# filtered_nums = [int(item) for item in user_input if item.isdigit()]
+# print(feltered_nums)
 
-# Вообще всё в одной строке
-print(list(map(int, filter(lambda x: x.isdigit(), input("Введите числа ерез пробел".split())))))
+# # Вообще всё в одной строке
+# print(list(map(int, filter(lambda x: x.isdigit(), input("Введите числа ерез пробел".split())))))
 
-# А теперь через list comprehension
-print([int(item) for item in input("Введите числа через пробел: ").split() if item.isdigit()])
+# # А теперь через list comprehension
+# print([int(item) for item in input("Введите числа через пробел: ").split() if item.isdigit()])
+
+
+########### Практика с Marvel
+
+"""
+small_dict: Dict[str, Union[None, int]] = { # Dict[str, None|int]
+    'Железный человек': 2008,
+    'Невероятный Халк': 2008,
+    'Железный человек 2': 2010,
+
+1. Спросить у человека год фильма
+2. Проверяем что это число, интуем, проверяем что входит в диапазон
+3. С помощью фильтра получаем фильмы этого года
+"""
+from dataset.marvel import small_dict
+
+years_values = set(small_dict.values())
+
+user_str_year = input("Введите год: ")
+user_year = None
+
+
+
+if user_str_year.isdigit():
+    user_year = int(user_str_year)
+    if user_year in years_values:
+        print(f"Вы ввели год {user_year}. Он валиден.")
+    else:
+        print(f"Вы ввели год {user_year}. Он не валиден.")
+
+else:
+    print(f"Вы ввели чушь.")
+
+
+if user_year:
+    # Делеаем фильтрацию через цикл
+    result = []
+    result_dict = {}
+    for film, year in small_dict.items():
+        if year == user_year:
+            result.append(film)
+            result_dict[film] = year
+
+
+print(result)
+print(result_dict)
