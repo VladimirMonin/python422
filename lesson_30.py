@@ -183,25 +183,80 @@ YEAR_LIMIT = 2020
            
 """
 
-# Сделаем перепаковку через цикл
-result_list = []
+# # Сделаем перепаковку через цикл
+# result_list = []
 
-for id, film_data in full_dict.items():
-    # Вариант где новый ключ id - последний
-    # film_data["id"] = id
-    # result_list.append(film_data)
-    # Вариант где новый ключ id - первый
-    new_dict = {"id": id, **film_data}
-    result_list.append(new_dict)
-
-
+# for id, film_data in full_dict.items():
+#     # Вариант где новый ключ id - последний
+#     # film_data["id"] = id
+#     # result_list.append(film_data)
+#     # Вариант где новый ключ id - первый
+#     new_dict = {"id": id, **film_data}
+#     result_list.append(new_dict)
 
 
-# Сделаем перепаковку через списковое включение
-result_list = [{"id": id, **film_data} for id, film_data in full_dict.items()]
-pprint(result_list, sort_dicts=False)
+# # Сделаем перепаковку через списковое включение
+# result_list = [{"id": id, **film_data} for id, film_data in full_dict.items()]
+# pprint(result_list, sort_dicts=False)
 
 #####
-names_list = ["Азамат", "Игорь", "Денис", "Спартак", "Константин", "Дмитрий", "Наталия", "Мария", "Артур", "Владимир"]
+# names_list = [
+#     "Азамат",
+#     "Игорь",
+#     "Денис",
+#     "Спартак",
+#     "Константин",
+#     "Дмитрий",
+#     "Наталия",
+#     "Мария",
+#     "Артур",
+#     "Владимир",
+# ]
+# names_list.sort()
+# print(names_list)
 
-print(names_list.sort())
+# # Реверс
+# names_list.sort(reverse=True)
+# print(names_list)
+
+# # Сортировка по длине имени
+# names_list.sort(key=len)
+# print(names_list)
+
+# # Сортировка по 2м признакам, длина имени и алфавит
+# names_list.sort(key=lambda name: (len(name), name))
+# print(names_list)
+
+# # Сортировка по последней букве имени
+# names_list.sort(key=lambda name: (name[-1], len(name)))
+# print(names_list)
+
+# # Sorted - функция высшего порядка, sorted(iterable, key=None, reverse=False)
+# # Возвращает отсортированную коллекцию типа list
+# print(sorted(names_list))
+
+# # По длине имени
+# print(sorted(names_list, key=len))
+
+
+# # Сортировка словаря по ключам small_dict.items()
+# pprint(dict(sorted(small_dict.items())), sort_dicts=False)
+
+
+# Явно зададим функцию сортировки
+# Сортировка словаря по ключам small_dict.items()
+# pprint(dict(sorted(small_dict.items(), key=lambda item: item[0])), sort_dicts=False)
+
+# # Сортировка словаря по значениям small_dict.items()
+pprint(
+    dict(
+        sorted(
+            small_dict.items(),
+            key=lambda item: item[1] if isinstance(item[1], int) else 3000,
+        )
+    ),
+    sort_dicts=False,
+)
+
+
+result_list = [{"id": id, **film_data} for id, film_data in full_dict.items()]
