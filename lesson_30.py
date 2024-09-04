@@ -248,15 +248,98 @@ YEAR_LIMIT = 2020
 # pprint(dict(sorted(small_dict.items(), key=lambda item: item[0])), sort_dicts=False)
 
 # # Сортировка словаря по значениям small_dict.items()
-pprint(
-    dict(
-        sorted(
-            small_dict.items(),
-            key=lambda item: item[1] if isinstance(item[1], int) else 3000,
-        )
-    ),
-    sort_dicts=False,
-)
+# pprint(
+#     dict(
+#         sorted(
+#             small_dict.items(),
+#             key=lambda item: item[1] if isinstance(item[1], int) else 3000,
+#         )
+#     ),
+#     sort_dicts=False,
+# )
 
 
 result_list = [{"id": id, **film_data} for id, film_data in full_dict.items()]
+
+# Сортировка списка словарей по ключу title
+# pprint(
+#     sorted(
+#         result_list,
+#         key=lambda item: item["title"] if isinstance(item["title"], str) else "",
+#     ),
+#     sort_dicts=False,
+# )
+
+# Функция для сортировки по ключу stage
+
+
+def sort_by_stage(item):
+    if item.get('stage'):
+        if isinstance(item["stage"], str):
+            match item["stage"]:
+                case "Первая фаза":
+                    return 1
+                case "Вторая фаза":
+                    return 2
+                case "Третья фаза":
+                    return 3
+                case "Четвёртая фаза":
+                    return 4
+                case "Пятая фаза":
+                    return 5
+                case "Шестая фаза":
+                    return 6
+                case _:
+                    return 99
+        else:
+            return 99
+    else:
+        return 99
+    
+
+# pprint(
+#     sorted(
+#         result_list,
+#         key=sort_by_stage,
+#     ),
+#     sort_dicts=False,
+# )
+
+stage_dict = {
+    "Первая фаза": 1,
+    "Вторая фаза": 2,
+    "Третья фаза": 3,
+    "Четвёртая фаза": 4,
+    "Пятая фаза": 5,
+    "Шестая фаза": 6,
+}
+
+# 
+phase_list = [
+    "Нулевая фаза",
+    "Первая фаза",
+    "Вторая фаза",
+    "Третья фаза",
+    "Четвёртая фаза",
+    "Пятая фаза",
+    "Шестая фаза",
+]
+
+# Перепакуем! Подставим в значение фазы индекс из списка
+new_result_list = [
+    {**item, "stage": phase_list.index(item.get("stage"))} for item in result_list
+]
+
+pprint(new_result_list, sort_dicts=False)
+
+
+# Сориторовка с лямбдой опираясь на словарь
+# pprint(
+#     sorted(
+#         result_list,
+#         key=lambda item: stage_dict.get(item.get("stage")) if item.get("stage") else 99,
+#     ),
+#     sort_dicts=False,
+# )
+
+# Резу
