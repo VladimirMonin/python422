@@ -129,4 +129,66 @@ sn -> say_name2 -> say_goodbye -> name = "Олег"
 # print(c2()) # 11
 # print(c2()) # 12
 
-fruits = ["apple", "banana", "cherry", "kiwi", "mango", "lemon", "orange", "grape"]
+# fruits = ["apple", "banana", "cherry", "kiwi", "mango", "lemon", "orange", "grape"]
+
+# def sort_fruits(fruits: List[str]) -> Callable[[], List[str]]:
+#     """
+#     Сортируем список и сохраняем результат в кеш
+#     :param fruits: Список фруктов
+#     :return: Функция, которая возвращает список фруктов или результат кеша
+#     """
+#     # fruits - local - Они будут тут
+#     cache: list = []
+
+#     def sort() -> List[str]:
+#         nonlocal cache # Позволяет перезаписать кеш, хранимый снаружи
+
+#         # Проверка, есть ли кеш, и совпадает ли он по длине 
+#         if not cache or len(cache) != len(fruits):
+#             # Сортируем фрукты
+#             cache = sorted(fruits)
+        
+#         return cache
+    
+#     return sort
+
+
+# # Тестируем функцию с кешем
+
+# sorter: Callable = sort_fruits(fruits)
+# print(sorter())
+
+# # Вызываем повторно с этими же данными (сортировка не будет произведена - вернется кеш)
+# print(sorter())
+
+# # Добавляем новый фрукт
+# fruits.append("apples")
+
+# # Пересортируем
+# print(sorter())
+
+# print(fruits)
+
+
+def print_decorator(func: Callable[[], None]) -> Callable[[], None]:
+    # func - хранится тут
+    def wrapper():
+        # Что-то делаем до вызова функции
+        print("Перед вызовом функции")
+        func()
+        print("После вызова функции")
+    
+    return wrapper
+
+def some_func():
+    print("Вызов какой-то функции")
+
+f: Callable = print_decorator(some_func)
+f()
+
+@print_decorator
+def some_func2() -> None:
+    print("Вызов функции some_func2")
+
+
+some_func2()
