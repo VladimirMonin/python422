@@ -75,6 +75,7 @@ from typing import List, Tuple, Callable
 
 def say_name2(name: str) -> Callable[[], None]:
     # Олег будет жить тут, пока не вызовется функция say_goodbye(), которая ссылается на него!
+    # name тут
     def say_goodbye():
         print(f"Пока {name}!")
 
@@ -84,3 +85,17 @@ sn: Callable = say_name2("Олег Тиньков")
 sn2: Callable = say_name2("Валера")
 sn()
 sn2()
+
+
+
+"""
+Пока sn ссылается на функцию say_name2, то она не будет удалена из памяти.
+Соответственно и Олег останется в переменной name.
+
+Почему замыкание?
+
+Мы держим внутренние окружения и "замыкаем" их по цепочке
+Обратившись к sn
+
+sn -> say_name2 -> say_goodbye -> name = "Олег" 
+"""
