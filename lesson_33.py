@@ -35,7 +35,7 @@
 
 # 4. Non-local: область видимости внутри функций
 
-a = 5 # Global
+# a = 5 # Global
 
 # def a_one():
 #     a = 1 # Local для функции a_one
@@ -73,18 +73,18 @@ from typing import List, Tuple, Callable
 
 
 
-def say_name2(name: str) -> Callable[[], None]:
-    # Олег будет жить тут, пока не вызовется функция say_goodbye(), которая ссылается на него!
-    # name тут
-    def say_goodbye():
-        print(f"Пока {name}!")
+# def say_name2(name: str) -> Callable[[], None]:
+#     # Олег будет жить тут, пока не вызовется функция say_goodbye(), которая ссылается на него!
+#     # name тут
+#     def say_goodbye():
+#         print(f"Пока {name}!")
 
-    return say_goodbye
+#     return say_goodbye
 
-sn: Callable = say_name2("Олег Тиньков")
-sn2: Callable = say_name2("Валера")
-sn()
-sn2()
+# sn: Callable = say_name2("Олег Тиньков")
+# sn2: Callable = say_name2("Валера")
+# sn()
+# sn2()
 
 
 
@@ -99,3 +99,34 @@ sn2()
 
 sn -> say_name2 -> say_goodbye -> name = "Олег" 
 """
+
+# def sum_a_b(a: int, b: int) -> int:
+#     return a + b
+
+
+# new_name = sum_a_b
+# # Callable - что-то вызываемое (функция)- значит она сама вызываема
+# # [[аргумент1, аргумент2], возвращаемое значение]
+# new_name: Callable[[int, int], int] = sum_a_b
+
+# def counter(start: int = 0) -> Callable[[], int]:
+#     # Данные переменной start лежат ТУТ
+
+#     def step():
+#         # При вызове мы переписываем start
+#         # Это возможно благодаря nonlocal (доступ наружу)
+#         nonlocal start
+#         start += 1
+#         return start
+    
+#     return step
+
+# c1 : Callable = counter()
+# c2 : Callable = counter(10)
+
+# print(c1()) # 1
+# print(c1()) # 2
+# print(c2()) # 11
+# print(c2()) # 12
+
+fruits = ["apple", "banana", "cherry", "kiwi", "mango", "lemon", "orange", "grape"]
