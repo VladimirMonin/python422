@@ -37,21 +37,50 @@
 
 a = 5 # Global
 
-def a_one():
-    a = 1 # Local для функции a_one
-    print(f'Внутри функции a_one = {a}')
+# def a_one():
+#     a = 1 # Local для функции a_one
+#     print(f'Внутри функции a_one = {a}')
 
-    def a_two():
-        nonlocal a # Даю возможность изменить переменную во внешней функции
-        a = 2 # local для функции a_two
-        print(f'Внутри функции a_two = {a}')
+#     def a_two():
+#         nonlocal a # Даю возможность изменить переменную во внешней функции
+#         a = 2 # local для функции a_two
+#         print(f'Внутри функции a_two = {a}')
 
-    # Сделаем принт ДО вызова функции а_two
-    print(f'Принт до вывызова функции a_two: {a}')
-    # Вызов функции а_two
-    a_two()
-    # Принт ПОСЛЕ вызова функции
-    print(f'Принт после вызова функции a_two: {a}')
+#     # Сделаем принт ДО вызова функции а_two
+#     print(f'Принт до вывызова функции a_two: {a}')
+#     # Вызов функции а_two
+#     a_two()
+#     # Принт ПОСЛЕ вызова функции
+#     print(f'Принт после вызова функции a_two: {a}')
 
-a_one()
-print(f'Внешний принт = {a}')
+# a_one()
+# print(f'Внешний принт = {a}')
+
+from typing import List, Tuple, Callable
+
+# def say_name(name: str):
+#     # name - local в пространстве функции say_name
+#     def say_goodbye():
+#         print(f"Пока {name}!")
+
+#     say_goodbye()
+
+# say_name("Валера")
+
+# # Ссылка на функцию - приравнивание без вызова функции
+# my_print: Callable = print
+# my_print('Привет из функции А!')
+
+
+
+def say_name2(name: str) -> Callable[[], None]:
+    # Олег будет жить тут, пока не вызовется функция say_goodbye(), которая ссылается на него!
+    def say_goodbye():
+        print(f"Пока {name}!")
+
+    return say_goodbye
+
+sn: Callable = say_name2("Олег Тиньков")
+sn2: Callable = say_name2("Валера")
+sn()
+sn2()
