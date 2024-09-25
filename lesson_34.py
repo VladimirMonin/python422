@@ -257,3 +257,33 @@ comprenhension_upper_name = get_comprenhension_upper_name()
 for_upper_name = get_for_upper_name()
 map_upper_name = get_map_upper_name()
 
+# ДЕКОРАТОР С ПАРАМЕТРАМИ!
+
+# Этот же декоратор, но чтобы он принимал 2 параметра, это префикс и постфикс
+# Первая функция передает параметры декоратора в обвертку
+
+def print_decorator_param(prefix: str = 'Начало', postfix: str = 'Конец')-> Callable:
+    # Вторая функция - сам декоратор. Передает обворачиваемую функцию в wrapper
+    def decorator(func: Callable) -> Callable:
+        # Третья функция - сама обвертка
+        def wrapper(*args, **kwargs):
+            print(f'Это старт: {prefix=}')
+            result = func(*args, **kwargs)
+            print(f'Это работа: {result=}')
+            print(f'Это финиш: {postfix=}')
+            return result
+        
+        return wrapper
+    
+    return decorator
+
+
+@print_decorator_param(postfix='Кастомный постфикс')
+def message(msg: str):
+    return f'Функция отработала: {msg}'
+
+
+msg = 'Басков!'
+
+result = message(msg)
+print(type(result))
