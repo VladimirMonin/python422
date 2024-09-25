@@ -189,9 +189,50 @@ with open(DATASET, 'r', encoding='utf-8') as file:
     cities = json.load(file)
 
 
+import time
+import json
+import traceback
+from functools import wraps
+from typing import Callable
+
+def logger_decorator2(func: Callable) -> Callable:
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        print(f"Entering {func.__name__} (logger_decorator)")
+        print("Stack trace:")
+        print(''.join(traceback.format_stack()[:-1]))
+        log = ''
+        try:
+            result = func(*args, **kwargs)
+        except Exception as e:
+            log = f'Ошибка при выполнении функции {func.__name__}: {e}'
+            log += f'\n, Аргументы функции: {args if args else ""}, {kwargs if kwargs else ""}'
+        else:
+            log = f'Функция {func.__name__} успешно выполнена.'
+            return result
+        finally:
+            print(log)
+    return wrapper
+
+def check_time_decorator2(func: Callable) -> Callable:
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        print(f"Entering {func.__name__} (check_time_decorator)")
+        print("Stack trace:")
+        print(''.join(traceback.format_stack()[:-1]))
+        start_time = time.perf_counter()
+        result = func(*args, **kwargs)
+        finish_time = time.perf_counter()
+        result_time = finish_time - start_time
+        print(f'Функция {func.__name__} отработала за {result_time:.10f} сек.')
+        return result
+    return wrapper
+
+
+
 # 3 функции, которые обойдут cities, циклом, map, comprenhension, заглянут в ключ name и сделают upper
-@logger_decorator
-@check_time_decorator
+@logger_decorator2
+@check_time_decorator2
 def get_for_upper_name(cities: list = cities) -> list:
     result =[]
 
@@ -200,13 +241,13 @@ def get_for_upper_name(cities: list = cities) -> list:
         result.append(city)
 
     return result
-@logger_decorator
-@check_time_decorator
+@logger_decorator2
+@check_time_decorator2
 def get_map_upper_name(cities: list = cities) -> list:
     result = list(map(lambda x: {'name': x['name'].upper(), **x}, cities))
     return result
-@logger_decorator
-@check_time_decorator
+@logger_decorator2
+@check_time_decorator2
 def get_comprenhension_upper_name(cities: list = cities) -> list:
     result = [{'name': city['name'].upper(), **city} for city in cities]
     return result
