@@ -190,6 +190,7 @@ with open(DATASET, 'r', encoding='utf-8') as file:
 
 
 # 3 функции, которые обойдут cities, циклом, map, comprenhension, заглянут в ключ name и сделают upper
+@logger_decorator
 @check_time_decorator
 def get_for_upper_name(cities: list = cities) -> list:
     result =[]
@@ -199,12 +200,12 @@ def get_for_upper_name(cities: list = cities) -> list:
         result.append(city)
 
     return result
-
+@logger_decorator
 @check_time_decorator
 def get_map_upper_name(cities: list = cities) -> list:
     result = list(map(lambda x: {'name': x['name'].upper(), **x}, cities))
     return result
-
+@logger_decorator
 @check_time_decorator
 def get_comprenhension_upper_name(cities: list = cities) -> list:
     result = [{'name': city['name'].upper(), **city} for city in cities]
