@@ -19,14 +19,14 @@
 # print(a)
 
 # # 2. Local: область видимости внутри функции
-# def some_func(main_data=MAIN_DATA):
-#     # Директива global a определит что а - глобальная
-#     global a, b
-#     a = 5
-#     b = 22
-#     с = 'c'
-#     print(f'Привет из функции, а = {a}')
-#     print(f'Доступ к константе MAIN_DATA: {MAIN_DATA}')
+def some_func(main_data=MAIN_DATA):
+    # Директива global a определит что а - глобальная
+    global a, b
+    a = 5
+    b = 22
+    с = 'c'
+    print(f'Привет из функции, а = {a}')
+    print(f'Доступ к константе MAIN_DATA: {MAIN_DATA}')
 
 # some_func()
 # print(a) # Попрежнему 10 (Глобальная область видимости)
@@ -37,14 +37,14 @@
 
 # a = 5 # Global
 
-# def a_one():
-#     a = 1 # Local для функции a_one
-#     print(f'Внутри функции a_one = {a}')
+def a_one():
+    a = 1 # Local для функции a_one
+    print(f'Внутри функции a_one = {a}')
 
-#     def a_two():
-#         nonlocal a # Даю возможность изменить переменную во внешней функции
-#         a = 2 # local для функции a_two
-#         print(f'Внутри функции a_two = {a}')
+    def a_two():
+        nonlocal a # Даю возможность изменить переменную во внешней функции
+        a = 2 # local для функции a_two
+        print(f'Внутри функции a_two = {a}')
 
 #     # Сделаем принт ДО вызова функции а_two
 #     print(f'Принт до вывызова функции a_two: {a}')
@@ -170,25 +170,25 @@ sn -> say_name2 -> say_goodbye -> name = "Олег"
 # print(fruits)
 
 
-def print_decorator(func: Callable[[], None]) -> Callable[[], None]:
-    # func - хранится тут
-    def wrapper():
-        # Что-то делаем до вызова функции
-        print("Перед вызовом функции")
-        func()
-        print("После вызова функции")
+# def print_decorator(func: Callable[[], None]) -> Callable[[], None]:
+#     # func - хранится тут
+#     def wrapper():
+#         # Что-то делаем до вызова функции
+#         print("Перед вызовом функции")
+#         func()
+#         print("После вызова функции")
     
-    return wrapper
+#     return wrapper
 
-def some_func():
-    print("Вызов какой-то функции")
+# def some_func():
+#     print("Вызов какой-то функции")
 
-f: Callable = print_decorator(some_func)
-f()
+# f: Callable = print_decorator(some_func)
+# f()
 
-@print_decorator
-def some_func2() -> None:
-    print("Вызов функции some_func2")
+# @print_decorator
+# def some_func2() -> None:
+#     print("Вызов функции some_func2")
 
 
-some_func2()
+# some_func2()
