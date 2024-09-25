@@ -2,7 +2,10 @@
 Декораторы
 Декораторы с параметрами
 """
+from calendar import c
+import re
 from typing import Callable
+
 
 def print_decorator(func: Callable[[], None]) -> Callable[[], None]:
     # func - хранится тут
@@ -102,6 +105,113 @@ def print_decorator4(func: Callable) -> Callable:
 def some_func9(name: str, age: int) -> str:
     return f'Привет {name}, тебе {age} лет'
 
-result = some_func9('Cергей Сергеич', 30)
-print(result)
+result_some_func9 = some_func9('Cергей Сергеич', 30)
+# Отладочная строка
+print(f'{result_some_func9=}')
+
+
+def logger_decorator(func: Callable) -> Callable:
+    def wrapper(*args, **kwargs):
+        log = ''
+        # Попытка что-то сделать
+        try:
+            result = func(*args, **kwargs)
+        # Поймали ошибку
+        except Exception as e:
+            log = f'Ошибка при выполнении функции {func.__name__}: {e}'
+            log += f'\n, Аргументы функции: {args if args else ""}, {kwargs if kwargs else ""}'
+        # Ошибка не случилась
+        else:
+            log = f'Функция {func.__name__} успешно выполнена.'
+            return result
+        # Отработает в обоих случаях
+        finally:
+            print(log)
+            # Запись в лог файл
+
+    return wrapper
+            
+
+@logger_decorator
+def delimetr(a: int, b: int) -> float:
+    return a / b
+
+delimetr(10, 5)
+delimetr(10, 0)
+
+"""
+time.perf_counter() — это функция из модуля time в стандартной библиотеке Python, которая предоставляет доступ к 
+монотонному счётчику времени с наивысшим доступным разрешением для измерения коротких промежутков времени. 
+Вот несколько ключевых моментов об time.perf_counter():
+
+Монотонность: Этот счетчик является монотонным, что означает, что его значения никогда не уменьшаются. 
+Это важно для измерения временных интервалов, так как это гарантирует, что разница между концом и началом 
+интервала всегда будет положительной или нулевой, даже если системные часы изменяются.
+
+Высокое разрешение: Функция предоставляет время с высокой точностью, что делает ее идеальной для замера 
+времени выполнения операций, особенно когда требуется измерить очень короткие промежутки времени.
+
+Независимость от системного времени: Значение, возвращаемое time.perf_counter(), не зависит от системного 
+времени и не подвержено изменениям из-за корректировки часов или перехода на летнее/зимнее время.
+
+Использование: Эта функция часто используется для бенчмаркинга и профилирования кода, поскольку 
+она предоставляет более точные измерения времени, чем time.time() или time.clock().
+
+Платформонезависимость: time.perf_counter() работает на различных платформах, 
+предоставляя стабильный интерфейс для замера времени.
+
+Возвращаемое значение: Функция возвращает время в секундах как число с 
+плавающей точкой. С момента запуска Python (или от момента первого вызова time.perf_counter(), 
+точное определение зависит от реализации) до момента вызова функции.
+
+
+start_time = time.perf_counter()
+finish_time = time.perf_counter()
+"""
+
+import time
+import json
+
+def check_time_decorator(func: Callable) -> Callable:
+    def wrapper(*args, **kwargs):
+        start_time = time.perf_counter()
+        func(*args, **kwargs)
+        finish_time = time.perf_counter()
+        result_time = finish_time - start_time
+        print(f'Функция {func.__name__} отработала за {result_time:.10f} сек.')
+
+    return wrapper
+
+
+DATASET = "cities.json"
+
+with open(DATASET, 'r', encoding='utf-8') as file:
+    cities = json.load(file)
+
+
+# 3 функции, которые обойдут cities, циклом, map, comprenhension, заглянут в ключ name и сделают upper
+@check_time_decorator
+def get_for_upper_name(cities: list = cities) -> list:
+    result =[]
+
+    for city in cities:
+        city = {**city, 'name': city['name'].upper()}
+        result.append(city)
+
+    return result
+
+@check_time_decorator
+def get_map_upper_name(cities: list = cities) -> list:
+    result = list(map(lambda x: {'name': x['name'].upper(), **x}, cities))
+    return result
+
+@check_time_decorator
+def get_comprenhension_upper_name(cities: list = cities) -> list:
+    result = [{'name': city['name'].upper(), **city} for city in cities]
+    return result
+
+
+comprenhension_upper_name = get_comprenhension_upper_name()
+for_upper_name = get_for_upper_name()
+map_upper_name = get_map_upper_name()
 
