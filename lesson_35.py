@@ -22,16 +22,30 @@ Lesson 35. Знакомство с ООП
 class Cat:
     # Атрибут класса
     clinic = 'Котоклиника'
-    def __init__(self, name: str):
+    def __init__(self, name: str, age: int, weight: float, breed: str = 'дворянин'):
         # Атрибут экземпляра - данные, которые будут принадлежать конкретному экземпляру класса. И только ему.
         self.name =name
+        self.age= age
+        self.weight = weight
+        self.breed = breed
 
-cat1 = Cat('Мурзик') # TypeError: Cat.__init__() missing 1 required positional argument: 'name'
-cat2 = Cat('Барсик')
+    def __str__(self):
+        """
+        Возвращает строковое преедставление объекта класса. (для принта)
+        Формат: Имя: Мурзик, Возраст: 3, Вес: 4, Порода: дворянин, клиника: КотоклиникаИмя: Мурзик, Возраст: 3, Вес: 4, Порода: дворянин, клиника: Котоклиника
+        """
+        return f'Имя: {self.name}\nВозраст: {self.age}\nВес: {self.weight}\nПорода: {self.breed}\nКлиника: {self.clinic}\n{"-"*30}'
+    
 
-cats = [cat1, cat2]
+cat1 = Cat('Мурзик', 3, 4)
+cat2 = Cat('Барсик', 5, 8)
+cat3 = Cat('Лео', 4, 5, 'Свинкс')
 
-[print(cat.name) for cat in cats]
-[print(cat.clinic) for cat in cats]
-
+cats = [cat1, cat2, cat3]
+[print(cat) for cat in cats]
+"""
+<__main__.Cat object at 0x0000026D770E25A0>
+<__main__.Cat object at 0x0000026D76E1B4A0>
+<__main__.Cat object at 0x0000026D770E2570>
+"""
 [print(f'Кличка кота: {cat.name}, Клиника: {cat.clinic}') for cat in cats]
