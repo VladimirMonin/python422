@@ -20,20 +20,18 @@ Lesson 35. Знакомство с ООП
 
 
 class Cat:
-    # Атрибут (поле) класса - переменная которая 
-    name = 'Безымянный кот'
-    pass
+    # Атрибут класса
+    clinic = 'Котоклиника'
+    def __init__(self, name: str):
+        # Атрибут экземпляра - данные, которые будут принадлежать конкретному экземпляру класса. И только ему.
+        self.name =name
 
-cat1 = Cat()
-cat2 = Cat()
-Cat.name = 'Безымянный барсик'
-
-
-# print(cat1.name) # Безымянный кот
-cat1.name = 'Барсик'
-# print(cat1.name) # Барсик
+cat1 = Cat('Мурзик') # TypeError: Cat.__init__() missing 1 required positional argument: 'name'
+cat2 = Cat('Барсик')
 
 cats = [cat1, cat2]
 
-for cat in cats:
-    print(cat.name)
+[print(cat.name) for cat in cats]
+[print(cat.clinic) for cat in cats]
+
+[print(f'Кличка кота: {cat.name}, Клиника: {cat.clinic}') for cat in cats]
