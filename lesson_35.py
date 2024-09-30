@@ -37,15 +37,28 @@ class Cat:
         return f'Имя: {self.name}\nВозраст: {self.age}\nВес: {self.weight}\nПорода: {self.breed}\nКлиника: {self.clinic}\n{"-"*30}'
     
 
+    def get_voise(self):
+        """
+        Это метод экземпляра. Потому что на входе self и мы работаем с данными каждого
+        конкретного экземпляра класса.
+        """
+        print(f'{self.name} говорит: Мяу!')
+
+    def get_human_age(self, multiplier: int):
+        """
+        Метод который позволяет узнать возраст котика в годах человека.
+        Принимает на вход значение коэфициента умножения (6 или 7).
+        """
+        return self.age * multiplier
+
 cat1 = Cat('Мурзик', 3, 4)
 cat2 = Cat('Барсик', 5, 8)
 cat3 = Cat('Лео', 4, 5, 'Свинкс')
 
+print(cat1.get_human_age(6))
+
 cats = [cat1, cat2, cat3]
-[print(cat) for cat in cats]
-"""
-<__main__.Cat object at 0x0000026D770E25A0>
-<__main__.Cat object at 0x0000026D76E1B4A0>
-<__main__.Cat object at 0x0000026D770E2570>
-"""
-[print(f'Кличка кота: {cat.name}, Клиника: {cat.clinic}') for cat in cats]
+
+# cat1.get_voise()
+
+[cat.get_voise() for cat in cats]
