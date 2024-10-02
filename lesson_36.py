@@ -16,33 +16,34 @@ __ - private (закрытые полностью) доступны только
 _ - protected (защищенные) доступны внутри класса, а также в наследниках.
 """
 
-class Person():
-    def __init__(self, first_name: str, last_name: str, age: int, passport_number: str):
-        self.__first_name = first_name
-        self.__last_name = last_name
-        self.__age = age
-        self.__passport_number = passport_number
+# All - возвращает true если все элементы списка True
+# Any - возвращает true если хотя бы один элемент списка True
 
-    def __str__(self) -> str:
-        return f"{self.__first_name} {self.__last_name}"
-    
-    @property
-    def passport_number(self):
-        # Логирование, или другая логика
-        return f"{self.__passport_number}"
-    
-    @passport_number.setter
-    def passport_number(self, passport_number: str):
-        is_all_digit= all(char.isdigit() for char in passport_number.replace(' ', ''))
-        if is_all_digit:
-            self.__passport_number = passport_number
-        else:
-            raise ValueError("Неверный формат паспорта")
-    
-    
-p = Person('Bob', 'Bobov', 20, '123456789')
-print(p)
-print(p.passport_number)
-p.passport_number = '98765  43231'
-print(p.passport_number)
+integers = [0, 0, 0, 1]
+trus_list = [True, True, False]
 
+is_all_true = all(trus_list)
+is_any_true = any(trus_list)
+
+
+is_all_zeroes = all(x == 0 for x in integers)
+is_any_zeroes = any(x == 0 for x in integers)
+
+# Проверка, все ли строки в списке содержат определенную подстроку
+strings = ["hello world", "hello python", "hello programming"]
+contains_hello = all("hello" in s.lower() for s in strings)
+
+# Проверка, есть ли в списке словарей элемент с определенным значением ключа
+users = [
+    {"name": "Alice", "age": 25},
+    {"name": "Bob", "age": 30},
+    {"name": "Charlie", "age": 35}
+]
+has_adult = any(user["age"] >= 18 for user in users)
+
+# Проверка, все ли числа в списке являются простыми
+def is_prime(n):
+    return n > 1 and all(n % i != 0 for i in range(2, int(n**0.5) + 1))
+
+numbers = [2, 3, 5, 7, 11, 13]
+all_prime = all(is_prime(num) for num in numbers)
