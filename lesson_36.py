@@ -26,11 +26,13 @@ class Person():
     def __str__(self) -> str:
         return f"{self.__first_name} {self.__last_name}"
     
-    def get_passport_data(self):
+    @property
+    def passport_number(self):
         # Логирование, или другая логика
         return f"{self.__passport_number}"
     
-    def set_passport_data(self, passport_number: str):
+    @passport_number.setter
+    def passport_number(self, passport_number: str):
         is_all_digit= all(char.isdigit() for char in passport_number.replace(' ', ''))
         if is_all_digit:
             self.__passport_number = passport_number
@@ -40,7 +42,7 @@ class Person():
     
 p = Person('Bob', 'Bobov', 20, '123456789')
 print(p)
-print(p.get_passport_data())
-p.set_passport_data('9876543231')
+print(p.passport_number)
+p.passport_number = '98765  43231'
+print(p.passport_number)
 
-# p.passport_number = 'sdfsdf'
