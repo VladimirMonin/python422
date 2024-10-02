@@ -9,27 +9,23 @@ Lesson 36: Инкапсуляция
 Практика: pytybefix - библиотека для выгрузки видео с ютуба
 """
 
-class Cat():
-    types = ['дворянин', 'мэйнкун', 'питерская карнавальская']
-    def __init__(self, name:str):
-        self.name = name
-        
+"""
+У нас есть возможность спрятать атрибуты или методы класса, чтобы закрыть доступ к ним извне.
+Обычные методы и классы = public (открытые)
+__ - private (закрытые полностью) доступны только внутри класса
+_ - protected (защищенные) доступны внутри класса, а также в наследниках.
+"""
 
-    @staticmethod
-    def get_human_age(age: int) -> int:
-        return age * 7
-    
-    @classmethod
-    def add_new_type(cls, new_type: str):
-        # Тут может быть серия проверок!
-        cls.types.append(new_type)
-        print(cls.__name__)
+class Person():
+    def __init__(self, name: str, age: int):
+        self.__name = name
+        self._age = age
 
-    
 
-cat = Cat("Мурзик")
-print(cat.types)
-cat.add_new_type('вислоухий скотиш')
-print(cat.types)
-cat1 = Cat("Кот")
-print(cat1.types)
+p = Person('Bob', 20)
+# print(p.name)
+# print(p.__name) # AttributeError: 'Person' object has no attribute '__name'
+print(p._age)
+
+# Достанем p.__name
+print(p._Person__name)
