@@ -21,11 +21,17 @@ class Person():
         self.__name = name
         self._age = age
 
+    def __get_info_sring(self):
+        return f'{self.__name} - {self._age}'
+    
+    def show_info(self):
+        info = self.__get_info_sring()
+        print(info)
+
 
 p = Person('Bob', 20)
-# print(p.name)
-# print(p.__name) # AttributeError: 'Person' object has no attribute '__name'
-print(p._age)
-
-# Достанем p.__name
-print(p._Person__name)
+p._Person__name
+# p.__get_info_sring() # AttributeError: 'Person' object has no attribute '_Person__get_info_sring'
+# result = p._Person__get_info_sring()
+# print(result)
+p.show_info()
