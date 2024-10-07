@@ -14,7 +14,9 @@ class Animal:
 
 
 class Cat(Animal):
-    
+    def __init__ (self, name, color):
+        self.color = color
+        super().__init__(name)
     def voise(self):
         # Вызовем метод родителя через super()
         super().voise()
@@ -23,6 +25,6 @@ class Cat(Animal):
         print(f'{self.name} мяукает')
 
 animal = Animal("Животное")
-cat = Cat("Беляш")
+cat = Cat("Беляш", "Рыжий")
 print(cat)
 cat.voise()
