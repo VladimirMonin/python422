@@ -6,8 +6,15 @@ class Animal:
     def __init__(self, name):
         self.name = name
 
+    def __str__(self):
+        return f'Это {self.__class__.__name__} с именем {self.name}'
+
 class Cat(Animal):
-    pass
+    
+    def voise(self):
+        print(f'{self.name} мяукает')
 
 animal = Animal("Животное")
-cat = Cat("Кот")
+cat = Cat("Беляш")
+print(cat)
+cat.voise()
