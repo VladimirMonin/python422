@@ -8,10 +8,18 @@ class Animal:
 
     def __str__(self):
         return f'Это {self.__class__.__name__} с именем {self.name}'
+    
+    def voise(self):
+        print(f'{self.name} издает звук')
+
 
 class Cat(Animal):
     
     def voise(self):
+        # Вызовем метод родителя через super()
+        super().voise()
+        # Это можно сделать и напрямую
+        # Animal.voise(self)
         print(f'{self.name} мяукает')
 
 animal = Animal("Животное")
