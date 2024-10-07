@@ -52,4 +52,16 @@ cats = [Cat(**cat_data) for cat_data in cats_list]
 for cat in cats:
     print(cat)
 
-    
+cats[2].__delattr__("favorite_toy")
+print(cats[2].__dir__())
+print(cats[2].__dict__) # выводит словарь атрибутов
+"""
+Методы для работы с атрибутами
+__getattr__ - добывает атрибуты
+__setattr__ - устанавливает атрибуты
+__delattr__ - удаляет атрибуты
+
+__dir__ - возвращает список методов (Все целиком)
+__dict__ - возвращает словарь атрибутов
+
+"""
