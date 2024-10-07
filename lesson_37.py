@@ -14,6 +14,14 @@ class Animal:
     def validate_attr(self, attr_name):
         if attr_name not in self.animal_attrs:
             raise ValueError(f'Атрибут {attr_name} не поддерживается классом {self.__class__.__name__}')
+        
+    def __str__(self):
+        """
+        Универсальный метод для вывода информации о животном
+        Выводит циклом по атрибутам и их значениям все данные
+        """
+        attrs = [f'{attr}: {getattr(self, attr)}' for attr in self.__dict__.keys()]
+        return f'{self.__class__.__name__}: {", ".join(attrs)}'
 
     
 
@@ -21,6 +29,14 @@ class Cat(Animal):
     def __init__(self, name, color, **kwargs):
         super().__init__(name, **kwargs)
         self.color = color
+
+
+class Dog(Animal):
+    def __init__(self, name, color, dog_type, **kwargs):
+        super().__init__(name, **kwargs)
+        self.color = color
+        self.dog_type = dog_type
+
 
 # Пример использования
 # cat = Cat("Беляш", "Рыжий", age=3, weight=4.5, favoriteToy="мячик")
@@ -52,16 +68,6 @@ cats = [Cat(**cat_data) for cat_data in cats_list]
 for cat in cats:
     print(cat)
 
-cats[2].__delattr__("favorite_toy")
-print(cats[2].__dir__())
-print(cats[2].__dict__) # выводит словарь атрибутов
-"""
-Методы для работы с атрибутами
-__getattr__ - добывает атрибуты
-__setattr__ - устанавливает атрибуты
-__delattr__ - удаляет атрибуты
 
-__dir__ - возвращает список методов (Все целиком)
-__dict__ - возвращает словарь атрибутов
-
-"""
+dog = Dog("Шарик", "Рыжий", "Дворняга", age=2, weight=10.5, favorite_toy="тарелка")
+print(dog)
