@@ -1,25 +1,14 @@
-"""
-Lesson 38 - Наследование
-- Варианты наследования (Иерархическое, множественное)
-- Абстрактный класс и абстрактные методы
-- Конфликты
-- MRO
-- Миксины
-"""
-# Импорт ABC
 from abc import ABC, abstractmethod
 
 class Animal(ABC):
-    def __init__(self, name:str, age:int):
+    def __init__(self, name: str, age: int):
         self.name = name
         self.age = age
 
-    # Абстрактный метод
     @abstractmethod
     def make_sound(self):
         pass
 
-    
     @property
     def name(self):
         return self._name
@@ -43,14 +32,57 @@ class Animal(ABC):
         if value < 0 or value > 150:
             raise ValueError("Возраст должен быть в диапазоне от 0 до 150")
         self._age = value
-    
 
-class Cat(Animal):
+class SeaAnimalMixin:
+    def __init__(self):
+        self.can_breathe_underwater = True
+
+    def breathe_underwater(self):
+        return f"{self.name} дышит под водой."
+
+    def swim(self):
+        return f"{self.name} плавает в воде."
+
+class LandAnimalMixin:
+    def __init__(self):
+        self.legs = 4
+
+    def walk(self):
+        return f"{self.name} ходит на {self.legs} лапах."
+
+    def run(self):
+        return f"{self.name} бежит на {self.legs} лапах."
+
+class Cat(Animal, LandAnimalMixin):
     def __init__(self, name: str, age: int, breed: str, color: str):
-        super().__init__(name, age)
+        Animal.__init__(self, name, age)
+        LandAnimalMixin.__init__(self)
         self.breed = breed
         self.color = color
 
     def make_sound(self):
         return "Мяу!"
 
+class Dog(Animal, LandAnimalMixin):
+    def __init__(self, name: str, age: int, breed: str):
+        Animal.__init__(self, name, age)
+        LandAnimalMixin.__init__(self)
+        self.breed = breed
+
+    def make_sound(self):
+        return "Гав!"
+
+class Fish(Animal, SeaAnimalMixin):
+    def __init__(self, name: str, age: int, species: str):
+        Animal.__init__(self, name, age)
+        SeaAnimalMixin.__init__(self)
+        self.species = species
+
+    def make_sound(self):
+        return "Буль-буль!"
+    
+
+dog = Dog("Бобик", 5, "Дворняга")
+print(dog.walk())
+print(dog.run())
+print(dog.make_sound())
