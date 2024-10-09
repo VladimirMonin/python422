@@ -9,72 +9,48 @@ Lesson 38 - Наследование
 # Импорт ABC
 from abc import ABC, abstractmethod
 
-class AbstractMatroyshka(ABC):
+class Animal(ABC):
+    def __init__(self, name:str, age:int):
+        self.name = name
+        self.age = age
 
+    # Абстрактный метод
     @abstractmethod
-    def open(self):
+    def make_sound(self):
         pass
 
-
-
-class BigMatryoshka(AbstractMatroyshka):
-    count = 0
-    def __init__(self, big_size: int):
-        # BigMatryoshka.count += 1
-        self.size = big_size
-        self.__class__.count += 1
-        self.id = self.__class__.count
-        print(f"Создана большая матрёшка с ID {self.id}")
-
-    @classmethod
-    def get_count(cls):
-        return f'Класс {cls.__name__} создал {cls.count} матрешек'
     
-    def __str__(self):
-        """
-        Универсальный str который вернет все атрибуты этого экземпляра
-        """
-        attrs = [f'{attr}: {getattr(self, attr)}' for attr in self.__dict__.keys()]
-        return f'{self.__class__.__name__}: {", ".join(attrs)}'
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        if not isinstance(value, str):
+            raise TypeError("Имя должно быть строкой")
+        if len(value) < 2 or len(value) > 50:
+            raise ValueError("Длина имени должна быть от 2 до 50 символов")
+        self._name = value
+
+    @property
+    def age(self):
+        return self._age
+
+    @age.setter
+    def age(self, value):
+        if not isinstance(value, int):
+            raise TypeError("Возраст должен быть целым числом")
+        if value < 0 or value > 150:
+            raise ValueError("Возраст должен быть в диапазоне от 0 до 150")
+        self._age = value
     
-    def open(self):
-        print(f"Открываю матрёшку {self.__class__.__name__} с ID {self.id}")
 
+class Cat(Animal):
+    def __init__(self, name: str, age: int, breed: str, color: str):
+        super().__init__(name, age)
+        self.breed = breed
+        self.color = color
 
-class MediumMatryoshka(BigMatryoshka):
-    count = 0
-    def __init__(self, medium_size: int, big_size: int):
-        self.size = medium_size
-        self.__class__.count += 1
-        self.id = self.__class__.count
-        self.big_matryoshka = BigMatryoshka(big_size)
-        print(f"Создана средняя матрёшка с ID {self.id}")
+    def make_sound(self):
+        return "Мяу!"
 
-    def open(self):
-        self.big_matryoshka.open()
-        print(f"Открываю матрёшку {self.__class__.__name__} с ID {self.id}")
-        
-
-
-class SmallMatryoshka(MediumMatryoshka):
-    count = 0
-    def __init__(self, small_size: int, medium_size: int, big_size: int):
-        self.size = small_size
-        self.__class__.count += 1
-        self.id = self.__class__.count
-        self.medium_matryoshka = MediumMatryoshka(medium_size=medium_size, big_size=big_size)
-        print(f"Создана маленькая матрёшка. ID {self.id}")
-
-    def open(self):
-        self.medium_matryoshka.open()
-        print(f"Открываю матрёшку {self.__class__.__name__} с ID {self.id}")
-
-
-
-sm = SmallMatryoshka(10, 20, 30)
-smed = MediumMatryoshka(20, 30)
-sb = BigMatryoshka(50)
-
-sm.open()
-# smed.open()
-# sb.open()
