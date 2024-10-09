@@ -26,6 +26,9 @@ class BigMatryoshka:
         """
         attrs = [f'{attr}: {getattr(self, attr)}' for attr in self.__dict__.keys()]
         return f'{self.__class__.__name__}: {", ".join(attrs)}'
+    
+    def open(self):
+        print(f"Открываю матрёшку {self.__class__.__name__} с ID {self.id}")
 
 
 class MediumMatryoshka(BigMatryoshka):
@@ -48,39 +51,11 @@ class SmallMatryoshka(MediumMatryoshka):
         print(f"Создана маленькая матрёшка. ID {self.id}")
 
 
-"""
-ЗАДАЧА
-Добавить уникальные ID для каждой категории матрешек (атрибут экземпляра)
-Добавить счетчик созданных матрешек (атрибут класса)
-
-На инициализации каждой матрешки:
-1. Мы увеличиваем счетчик созданных матрешек (в атрибуте класса)
-2. На основе него, устанавливаем уникальный ID для каждой матрешки (атрибут экземпляра)
-"""
-
-# Создадим по несколько разных комплектов и проверим счетчики и ID
 
 sm = SmallMatryoshka(10, 20, 30)
-print(sm.get_count())
-print(sm)
-
-sm2 = SmallMatryoshka(15, 25, 35)
-print(sm.get_count())
-print(sm2)
-sm3 = SmallMatryoshka(9, 12, 15)
-print(sm.get_count())
-print(sm3)
-print(f'{"---" * 10}')
-
 smed = MediumMatryoshka(20, 30)
-print(smed.get_count())
-
-
-
-smed2 = MediumMatryoshka(25, 35)
-print(smed.get_count())
-
-print(f'{"---" * 10}')
-
 sb = BigMatryoshka(50)
-print(sb.get_count())
+
+sm.open()
+smed.open()
+sb.open()
