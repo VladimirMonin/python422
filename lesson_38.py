@@ -8,37 +8,35 @@ Lesson 38 - Наследование
 """
 
 class BigMatryoshka:
+    count = 0
     def __init__(self):
-        print("Создана большая матрёшка")
+        # BigMatryoshka.count += 1
+        self.__class__.count += 1
+        self.id = self.__class__.count
+        print(f"Создана большая матрёшка с ID {self.id}")
+
+    @classmethod
+    def get_count(cls):
+        return f'Класс {cls.__name__} создал {cls.count} матрешек'
 
 
 class MediumMatryoshka(BigMatryoshka):
+    count = 0
     def __init__(self):
+        self.__class__.count += 1
+        self.id = self.__class__.count
         self.big_matryoshka = BigMatryoshka()
-        print("Создана средняя матрёшка")
+        print(f"Создана средняя матрёшка с ID {self.id}")
 
 
 class SmallMatryoshka(MediumMatryoshka):
+    count = 0
     def __init__(self):
+        self.__class__.count += 1
+        self.id = self.__class__.count
         self.medium_matryoshka = MediumMatryoshka()
-        print("Создана маленькая матрёшка")
+        print(f"Создана маленькая матрёшка. ID {self.id}")
 
-
-# Создали маленькую - создали среднюю - создали большую автоматически
-small_matryoshka = SmallMatryoshka()
-small_matryoshka2 = SmallMatryoshka()
-
-# Распечатаем маленькие матрёшки
-print(small_matryoshka)
-print(small_matryoshka2)
-
-# Распечатаем средние матрёшки
-print(small_matryoshka.medium_matryoshka)
-print(small_matryoshka2.medium_matryoshka)
-
-# Распечатаем большие матрёшки
-print(small_matryoshka.medium_matryoshka.big_matryoshka)
-print(small_matryoshka2.medium_matryoshka.big_matryoshka)
 
 """
 ЗАДАЧА
@@ -49,3 +47,29 @@ print(small_matryoshka2.medium_matryoshka.big_matryoshka)
 1. Мы увеличиваем счетчик созданных матрешек (в атрибуте класса)
 2. На основе него, устанавливаем уникальный ID для каждой матрешки (атрибут экземпляра)
 """
+
+# Создадим по несколько разных комплектов и проверим счетчики и ID
+
+sm = SmallMatryoshka()
+print(sm.get_count())
+
+sm2 = SmallMatryoshka()
+print(sm.get_count())
+
+sm3 = SmallMatryoshka()
+print(sm.get_count())
+
+print(f'{"---" * 10}')
+
+smed = MediumMatryoshka()
+print(smed.get_count())
+
+
+
+smed2 = MediumMatryoshka()
+print(smed.get_count())
+
+print(f'{"---" * 10}')
+
+sb = BigMatryoshka()
+print(sb.get_count())
