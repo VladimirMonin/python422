@@ -6,8 +6,18 @@ Lesson 38 - Наследование
 - MRO
 - Миксины
 """
+# Импорт ABC
+from abc import ABC, abstractmethod
 
-class BigMatryoshka:
+class AbstractMatroyshka(ABC):
+
+    @abstractmethod
+    def open(self):
+        pass
+
+
+
+class BigMatryoshka(AbstractMatroyshka):
     count = 0
     def __init__(self, big_size: int):
         # BigMatryoshka.count += 1
