@@ -40,6 +40,11 @@ class MediumMatryoshka(BigMatryoshka):
         self.big_matryoshka = BigMatryoshka(big_size)
         print(f"Создана средняя матрёшка с ID {self.id}")
 
+    def open(self):
+        self.big_matryoshka.open()
+        print(f"Открываю матрёшку {self.__class__.__name__} с ID {self.id}")
+        
+
 
 class SmallMatryoshka(MediumMatryoshka):
     count = 0
@@ -50,6 +55,10 @@ class SmallMatryoshka(MediumMatryoshka):
         self.medium_matryoshka = MediumMatryoshka(medium_size=medium_size, big_size=big_size)
         print(f"Создана маленькая матрёшка. ID {self.id}")
 
+    def open(self):
+        self.medium_matryoshka.open()
+        print(f"Открываю матрёшку {self.__class__.__name__} с ID {self.id}")
+
 
 
 sm = SmallMatryoshka(10, 20, 30)
@@ -57,5 +66,5 @@ smed = MediumMatryoshka(20, 30)
 sb = BigMatryoshka(50)
 
 sm.open()
-smed.open()
-sb.open()
+# smed.open()
+# sb.open()
