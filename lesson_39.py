@@ -1,55 +1,43 @@
 # Lesson 39: Множественное наследование. MRO. Миксины
-# __init__ и __new__ как две половины конструктора классов в Pythyon
-
-class Plate():
-    
-    def __init__(self, size):
-        self.size = size
-
-    def __new__(cls, *args, **kwargs):
-        return super().__new__(cls)
-
-
-p = Plate(10)
-
-# Паттерн проектирования "Одиночка"
-
-class SingleTonePlate():
-    _instance = None
-
-    def __new__(cls, *args, **kwargs):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance
-    
-    def __init__(self, color):
-        # Тут мы можем добавить такое же условие, и не выполнять
-        # инициализацию, если объект уже создан
-        # if not hasattr(self, 'color'):
-        self.color = color
-
-plate1 = SingleTonePlate('red')
-plate2 = SingleTonePlate('blue')
-plate3 = SingleTonePlate('green')
-
-print(plate1 is plate2)
-print(plate1 is plate3)
-print(plate2 is plate3)
-
-print(plate1)
-print(plate2)
-print(plate3)
-
-print(plate1.color)
-print(plate2.color)
-print(plate3.color)
 
 """
-# Заметка о работе оператора 'is' в Python:
-# Оператор 'is' в Python проверяет идентичность объектов, а не их значения.
-# Он сравнивает идентификаторы объектов (их адреса в памяти).
-# Два объекта считаются идентичными, если они ссылаются на одну и ту же область памяти.
-# В случае с SingleTonePlate, все экземпляры класса ссылаются на один и тот же объект в памяти,
-# поэтому 'is' возвращает True при их сравнении.
-# Важно отметить, что 'is' отличается от '==', который сравнивает значения объектов.
+Миксин для форматированного вывода: 
+
+Создайте PrintableMixin, который добавляет метод pretty_print() для красивого вывода информации об объекте. Примените его к классу Person с атрибутами name и age.
+
+1. Создать Person с атрибутами name и age.
+2. Создать PrintableMixin с методом pretty_print(). который вывыводит информацию о Person в красивом формате.
+Взаимодействуя с миксинами name и age, которых в самом миксине нет.
+3. Создать класс Student, который наследуется от Person и PrintableMixin.
+4. Создать объект класса Student с атрибутами name, age, и вывести его информацию в красивом формате.
 """
+
+
+
+class Person:
+    type = "Персона"
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+
+class PrintableMixin:
+    
+    def pretty_print(self):
+        print(f"{self.__class__.type}: {self.name},\nВозраст: {self.age} лет.")
+
+
+class Student(Person, PrintableMixin):
+    type = "Студент"
+    pass
+
+
+class Employee(Person, PrintableMixin):
+    type = "Сотрудник"
+    pass
+
+student = Student("Спиридон", 20)
+student.pretty_print()
+
+employee = Employee("Никифор", 25)
+employee.pretty_print()
