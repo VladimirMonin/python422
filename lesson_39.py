@@ -1,34 +1,55 @@
 # Lesson 39: Множественное наследование. MRO. Миксины
+# __init__ и __new__ как две половины конструктора классов в Pythyon
 
-# Порядок  разрешения методов в иерахическом наследовании
+class Plate():
+    
+    def __init__(self, size):
+        self.size = size
 
-from abc import ABC, abstractmethod
-
-class A(ABC):
-    @abstractmethod
-    def hello(self):
-        print('Hello from A')
-
-    def __str__(self):
-        return f'Это __str__ класса: {self.__class__.__name__} а так же от Object {super().__str__()}'
+    def __new__(cls, *args, **kwargs):
+        return super().__new__(cls)
 
 
-class X(A):
-    def hello(self):
-        print('Hello from X')
+p = Plate(10)
 
+# Паттерн проектирования "Одиночка"
 
-class Y(X):
-    def hello(self):
-        print('Hello from Y')
+class SingleTonePlate():
+    _instance = None
 
-class Z(Y):
-    def hello(self):
-        print('Hello from Z')
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+    
+    def __init__(self, color):
+        # Тут мы можем добавить такое же условие, и не выполнять
+        # инициализацию, если объект уже создан
+        # if not hasattr(self, 'color'):
+        self.color = color
 
+plate1 = SingleTonePlate('red')
+plate2 = SingleTonePlate('blue')
+plate3 = SingleTonePlate('green')
 
-z = Z()
-# MRO
-print(Z.mro())
-print(z.__class__.__mro__)
-print(z)
+print(plate1 is plate2)
+print(plate1 is plate3)
+print(plate2 is plate3)
+
+print(plate1)
+print(plate2)
+print(plate3)
+
+print(plate1.color)
+print(plate2.color)
+print(plate3.color)
+
+"""
+# Заметка о работе оператора 'is' в Python:
+# Оператор 'is' в Python проверяет идентичность объектов, а не их значения.
+# Он сравнивает идентификаторы объектов (их адреса в памяти).
+# Два объекта считаются идентичными, если они ссылаются на одну и ту же область памяти.
+# В случае с SingleTonePlate, все экземпляры класса ссылаются на один и тот же объект в памяти,
+# поэтому 'is' возвращает True при их сравнении.
+# Важно отметить, что 'is' отличается от '==', который сравнивает значения объектов.
+"""
