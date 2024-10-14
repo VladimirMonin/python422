@@ -1,39 +1,34 @@
 # Lesson 39: Множественное наследование. MRO. Миксины
-import time
-class A:
 
-    def __init__(self, name, age) -> None:
-        self.name = name
-        self.age = age
-        self.time = time.time()
-        
-    def greet(self):
-        print(f'Привет из A. Name: {self.name}, age: {self.age}')
+# Порядок  разрешения методов в иерахическом наследовании
 
-    def bye(self):
-        print(f'Пока из A. Name: {self.name}, age: {self.age}, time: {self.time}')
+from abc import ABC, abstractmethod
 
-class B:
-    def __init__(self, name, age) -> None:
-        self.name = name
-        self.age = age
-        
-    def greet(self):
-        print(f'Привет из B. Name: {self.name}, age: {self.age}')
+class A(ABC):
+    @abstractmethod
+    def hello(self):
+        print('Hello from A')
+
+    def __str__(self):
+        return f'Это __str__ класса: {self.__class__.__name__} а так же от Object {super().__str__()}'
 
 
+class X(A):
+    def hello(self):
+        print('Hello from X')
 
-class C(B, A):
-    def __init__(self, name, age) -> None:
-        # "Оттолкнись от B в MRO и вызови A __init__"
-        super(B, self).__init__(name, age)
-    
-    def greet(self):
-        print(f'Привет из C. Name: {self.name}, age: {self.age}')
-        super(C, self).greet() # super().greet() Вызывается метод greet класса B
-        super(B, self).greet() # Вызывается метод greet класса А
-        
 
-c = C('Alex', 25)
-c.greet()
-c.bye()
+class Y(X):
+    def hello(self):
+        print('Hello from Y')
+
+class Z(Y):
+    def hello(self):
+        print('Hello from Z')
+
+
+z = Z()
+# MRO
+print(Z.mro())
+print(z.__class__.__mro__)
+print(z)
