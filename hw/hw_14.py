@@ -177,16 +177,18 @@ class FileSystemWalkerMixin:
                 relative_path = os.path.relpath(file_path, path)
                 self.process_file(file_path, relative_path)
 
+
 class MarkdownGeneratorMixin:
     """Миксин для генерации Markdown-заметки."""
     def __init__(self):
         self.markdown_content = ""
         self.supported_extensions = ['py', 'sql', 'js', 'css', 'html']
+        self.current_directory = ""
 
     def process_directory(self, dir_path: str) -> None:
         """Обработка директории."""
-        dir_name = os.path.basename(dir_path)
-        self.markdown_content += f"## Директория: `{dir_name}`\n\n"
+        self.current_directory = os.path.basename(dir_path)
+        self.markdown_content += f"## Директория: `{self.current_directory}`\n\n"
 
     def process_file(self, file_path: str, relative_path: str) -> None:
         """Обработка файла."""
@@ -195,16 +197,26 @@ class MarkdownGeneratorMixin:
             with open(file_path, 'r', encoding='utf-8') as file:
                 file_content = file.read()
             file_name = os.path.basename(file_path)
-            self.markdown_content += (
-                f"### Файл: `{file_name}`\n"
-                f"```{file_extension}\n"
-                f"{file_content}\n"
-                "```\n\n"
-            )
+            if self.current_directory:
+                self.markdown_content += (
+                    f"### Файл: `{file_name}`\n"
+                    f"```{file_extension}\n"
+                    f"{file_content}\n"
+                    "```\n\n"
+                )
+            else:
+                self.markdown_content += (
+                    f"### Файл: `{relative_path}`\n"
+                    f"```{file_extension}\n"
+                    f"{file_content}\n"
+                    "```\n\n"
+                )
 
-    def get_markdown_content(self) -> str:
-        """Получение сформированной Markdown-заметки."""
-        return self.markdown_content
+    def save_markdown_file(self, file_path: str) -> None:
+        """Сохранение сформированной Markdown-заметки в файл."""
+        with open(file_path, 'w', encoding='utf-8') as file:
+            file.write(self.markdown_content)
+
 
 class ArchiveExtractor(FileSystemWalkerMixin, MarkdownGeneratorMixin):
     """Главный класс для распаковки архивов и генерации Markdown-заметки."""
@@ -224,15 +236,15 @@ class ArchiveExtractor(FileSystemWalkerMixin, MarkdownGeneratorMixin):
         else:
             raise ValueError("Неподдерживаемый формат архива")
 
-    def run(self) -> None:
+    def __call__(self) -> None:
         """Распаковка архива и генерация Markdown-заметки."""
         file_name = os.path.basename(self.file_path)
         dir_name = os.path.splitext(file_name)[0]
         extract_path = os.path.join(os.path.dirname(self.file_path), dir_name)
         self.archive.extract(self.file_path, extract_path)
         self.walk_files_and_dirs(extract_path)
-        markdown_content = self.get_markdown_content()
-        print(markdown_content)
+        markdown_file_path = os.path.join(extract_path, f"{dir_name}_note.md")
+        self.save_markdown_file(markdown_file_path)
         os.remove(self.file_path)
 
 # Пример использования
@@ -240,5 +252,5 @@ class ArchiveExtractor(FileSystemWalkerMixin, MarkdownGeneratorMixin):
 if __name__ == "__main__":
     file_path = input("Введите путь к архиву: ").strip('"').strip("'")
     extractor = ArchiveExtractor(file_path)
-    extractor.run()
+    extractor()
     input("Нажмите Enter для выхода...")
