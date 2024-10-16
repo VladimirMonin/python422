@@ -35,7 +35,8 @@
 """
 from abc import ABC, abstractmethod
 import os
-import shutil
+import shutil  # Для удаления папки
+# Импорты архиваторов
 import zipfile
 import rarfile
 import py7zr
@@ -76,21 +77,14 @@ class SevenZipArchive(AbstractArchive):
 
 class FileSystemWalkerMixin:
     """Миксин для рекурсивного обхода файлов и папок."""
-    def walk_files_and_dirs(self, path: str) -> None:
-        # Рекурсивный обход директорий и файлов
+    def walk_files_and_dirs(self, path: str, base_path: str) -> None:
+        """Рекурсивный обход файлов и папок."""
         for root, dirs, files in os.walk(path):
-            # Обработка каждой поддиректории
-            for dir in dirs:
-                self.process_directory(os.path.join(root, dir))
-            # Обработка каждого файла
             for file in files:
-                # Формирование полного пути к файлу
                 file_path = os.path.join(root, file)
-                # Вычисление относительного пути файла
-                relative_path = os.path.relpath(file_path, path)
-                # Обработка файла с учетом его полного и относительного пути
+                # Формируем относительный путь относительно base_path
+                relative_path = os.path.relpath(file_path, base_path)
                 self.process_file(file_path, relative_path)
-
 
 class MarkdownGeneratorMixin:
     """Миксин для генерации Markdown-заметки."""
@@ -98,21 +92,31 @@ class MarkdownGeneratorMixin:
         self.markdown_content = ""
         self.supported_extensions = ['py', 'sql', 'js', 'css', 'html']
 
-    def process_directory(self, dir_path: str) -> None:
-        """Обработка директории."""
-        # Удаляем обработку директорий, если она не нужна
-        pass
-
     def process_file(self, file_path: str, relative_path: str) -> None:
         """Обработка файла."""
         file_extension = os.path.splitext(file_path)[1][1:]
         if file_extension in self.supported_extensions:
-            with open(file_path, 'r', encoding='utf-8') as file:
-                file_content = file.read()
+            try:
+                with open(file_path, 'r', encoding='utf-8') as file:
+                    file_content = file.read()
+            except UnicodeDecodeError:
+                try:
+                    with open(file_path, 'r', encoding='cp1251') as file:
+                        file_content = file.read()
+                except Exception as e:
+                    print(f"Не удалось прочитать файл {file_path}: {e}")
+                    return
             file_name = os.path.basename(file_path)
             # Формируем заголовок согласно вашему требованию
+            # Проверяем, является ли os.path.dirname(relative_path) пустым
+            dirname = os.path.dirname(relative_path)
+            if dirname == ".":
+                dirname = ""
+            else:
+                dirname = dirname.replace("\\", "/")  # Заменяем обратные слеши на прямые для единообразия
+            header = f"## {dirname} \\ {file_name}" if dirname else f"## {file_name}"
             self.markdown_content += (
-                f"## {relative_path} \\ {file_name}\n"
+                f"{header}\n"
                 f"```{file_extension}\n"
                 f"{file_content}\n"
                 "```\n\n"
@@ -127,7 +131,7 @@ class MarkdownGeneratorMixin:
 class ArchiveExtractor(FileSystemWalkerMixin, MarkdownGeneratorMixin):
     """Главный класс для распаковки архивов и генерации Markdown-заметки."""
     def __init__(self, file_path: str):
-        super().__init__()
+        MarkdownGeneratorMixin.__init__(self)
         self.file_path = file_path
         self.archive = self._create_archive_extractor()
 
@@ -146,11 +150,20 @@ class ArchiveExtractor(FileSystemWalkerMixin, MarkdownGeneratorMixin):
         """Распаковка архива и генерация Markdown-заметки."""
         file_name = os.path.basename(self.file_path)
         dir_name = os.path.splitext(file_name)[0]
-        extract_path = os.path.join(os.path.dirname(self.file_path), dir_name)
+        parent_dir = os.path.dirname(self.file_path)
+        extract_path = os.path.join(parent_dir, dir_name)
         self.archive.extract(self.file_path, extract_path)
-        self.walk_files_and_dirs(extract_path)
-        # Сохраняем заметку РЯДОМ с разархивированной папкой
-        markdown_file_path = os.path.join(os.path.dirname(self.file_path), f"{dir_name}_note.md")
+        
+        # Определяем base_path
+        extracted_items = os.listdir(extract_path)
+        if len(extracted_items) == 1 and os.path.isdir(os.path.join(extract_path, extracted_items[0])):
+            base_path = os.path.join(extract_path, extracted_items[0])
+        else:
+            base_path = extract_path
+
+        self.walk_files_and_dirs(extract_path, base_path)
+        # Сохраняем заметку рядом с исходным архивом
+        markdown_file_path = os.path.join(parent_dir, f"{dir_name}_note.md")
         self.save_markdown_file(markdown_file_path)
         # Удаляем папку с распакованными файлами
         shutil.rmtree(extract_path)
