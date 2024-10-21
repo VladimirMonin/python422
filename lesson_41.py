@@ -24,77 +24,7 @@ __eq__ и __lt__ и __le__ минимальный набор, на базе ко
 """
 
 from abc import ABC, abstractmethod
-
-class AbstractProduct(ABC):
-    def __init__(self, name: str, category: str, height: float, width: float, depth: float, weight: float, availability: bool, price: float):
-        self.name = name
-        self.category = category
-        self.height = height
-        self.width = width
-        self.depth = depth
-        self.weight = weight
-        self.availability = availability
-        self.price = price
-
-    def __bool__(self) -> bool:
-        """
-        Возвращает наличие товара в продаже.
-        """
-        return self.availability
-
-    def __len__(self) -> float:
-        """
-        Возвращает суммарные габаритные характеристики (например, объем).
-        """
-        return self.weight / (self.height + self.width + self.depth)
-
-    def __eq__(self, other: 'AbstractProduct') -> bool:
-        if not isinstance(other, AbstractProduct):
-            return NotImplemented
-        return self.price == other.price
-
-    def __lt__(self, other: 'AbstractProduct') -> bool:
-        if not isinstance(other, AbstractProduct):
-            return NotImplemented
-        return self.price < other.price
-
-    def __le__(self, other: 'AbstractProduct') -> bool:
-        if not isinstance(other, AbstractProduct):
-            return NotImplemented
-        return self.price <= other.price
-
-    @abstractmethod
-    def __str__(self):
-        pass
-
-    @abstractmethod
-    def __repr__(self):
-        pass
-
-
-class Electronics(AbstractProduct):
-    def __init__(self, name: str, category: str, height: float, width: float, depth: float, weight: float, availability: bool, price: float, warranty_period: int):
-        super().__init__(name, category, height, width, depth, weight, availability, price)
-        self.warranty_period = warranty_period  # Гарантийный срок в месяцах
-
-    def __str__(self):
-        return f"{self.name} ({self.category}) - {self.price} руб., Гарантия: {self.warranty_period} месяцев"
-    
-    def __repr__(self):
-        return f"Electronics(name='{self.name}', category='{self.category}', height={self.height}, width={self.width}, depth={self.depth}, weight={self.weight}, availability={self.availability}, price={self.price}, warranty_period={self.warranty_period})"
-
-
-
-class Furniture(AbstractProduct):
-    def __init__(self, name: str, category: str, height: float, width: float, depth: float, weight: float, availability: bool, price: float, material: str):
-        super().__init__(name, category, height, width, depth, weight, availability, price)
-        self.material = material  # Материал изготовления
-
-    def __str__(self):
-        return f"{self.name} ({self.category}) - {self.price} руб., Материал: {self.material}"
-    
-    def __repr__(self):
-        return f"Furniture(name='{self.name}', category='{self.category}', height={self.height}, width={self.width}, depth={self.depth}, weight={self.weight}, availability={self.availability}, price={self.price}, material='{self.material}')"
+from dataclasses import dataclass
 
 electronics_data = [
     {
@@ -212,26 +142,43 @@ furniture_data = [
     }
 ]
 
+@dataclass
+class Furniture:
+    name: str
+    category: str
+    height: float
+    width: float
+    depth: float
+    weight: float
+    availability: bool
+    price: float
+    material: str
+    store: str = "Галактика диванов"
 
-electronics_products = [Electronics(**data) for data in electronics_data]
-furniture_products = [Furniture(**data) for data in furniture_data]
+    def __str__(self):
+        """
+        Возвращает название, цену и магазин
+        """
+        return f"{self.name} - {self.price} - {self.store}"
+    
+    def __bool__(self):
+        """
+        Возвращает доступность товара
+        """
+        return self.availability
 
-# правльный репр будет возвращать "Furniture(name=Левитирующий диван, category=Мягкая мебель, height=1.0, width=2.5, depth=1.0, weight=50.0, availability=True, price=300000.0, material=Антигравитационный текстиль)"
 
-quantum_computer  = electronics_products[0]
-levitating_sofa = furniture_products[0]
+furniture_list = [Furniture(**item) for item in furniture_data]
 
-# Сериализация объектов в строку с помощью repr()
-quantum_computer_str = repr(quantum_computer)
-levitating_sofa_str = repr(levitating_sofa)
+# Создаем в отдельную переменную Кресло-телепорт
+chair = furniture_list[4]
 
-print(quantum_computer_str)
-print(levitating_sofa_str)
+# Проверяем на равенство
+print(chair == furniture_list[4])
 
-# Десериализация объектов из строки с помощью eval()
-quantum_computer_obj = eval(quantum_computer_str)
-levitating_sofa_obj = eval(levitating_sofa_str)
-eval("print('Привет из eval!')")
+# Вызовим repr 
+string = repr(chair)
+print(string)
 
-print(quantum_computer_obj)
-print(levitating_sofa_obj)
+# Вызовим eval
+print(eval(string))
