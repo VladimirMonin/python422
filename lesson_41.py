@@ -19,116 +19,49 @@ __eq__ и __lt__ и __le__ минимальный набор, на базе ко
 языка допишет остальные методы (Т.е. один метод равно или не равно + больше или меньше + больше равно или меньше равно)
 """
 
-# Импорт total ordering
-from functools import total_ordering
-
-class Employee:
-    def __init__(self, name, salary):
-        self.name = name
-        self.salary = salary
-
-    def __eq__(self, other: 'Employee') -> bool:
-            if not isinstance(other, Employee):
-                raise TypeError('Класс Employee можно сравнивать только с экземплярами класса Employee')
-            return self.salary == other.salary
-    
-    def __lt__(self, other: 'Employee') -> bool:
-            if not isinstance(other, Employee):
-                raise TypeError('Класс Employee можно сравнивать только с экземплярами класса Employee')
-            return self.salary < other.salary
-    
-    def __le__(self, other: 'Employee') -> bool:
-            if not isinstance(other, Employee):
-                raise TypeError('Класс Employee можно сравнивать только с экземплярами класса Employee')
-            return self.salary <= other.salary
-
-    def __repr__(self):
-        return f'{self.name} - {self.salary}'
-
-
-employers = [
-    {
-        'name': 'Николаич',
-        'salary': 200000
-    },
-    {
-        'name': 'Иваныч',
-        'salary': 200000
-    }
-]
-
-employers_objs = [Employee(e['name'], e['salary']) for e in employers]
-employee1, employee2 = employers_objs
-
-print(employee1 == employee2) # == __eq__ вызывается под капотом
-
-print(employee1 is employee2) # is сравнивает адреса в памяти
-
-print(employee1 != employee2) # == __eq__ вызывается под капотом
-
-print(employee1 >= employee2) 
-
 """
-Практика!
-Попробуйте создать класс Product принмающий аргументы name, price, catagory 
-и реализовать магические методы сравнения для этого класса на основе цены
+Давайте сделаем два класса которые представляют разные категории продукции в инт. магазине
+Electronics - электроника
+Furniture - мебель
+
+Опишем логику сравнения 
 """
 
-products = [
-    {"name": "Ноутбук Lenovo ThinkPad", "price": 89999.99, "category": "Ноутбуки"},
-    {"name": "Смартфон Samsung Galaxy S21", "price": 69999.50, "category": "Телефоны"},
-    {"name": "Холодильник LG", "price": 54999.00, "category": "Бытовая электроника"},
-    {"name": "Ноутбук Apple MacBook Air", "price": 99999.99, "category": "Ноутбуки"},
-    {"name": "Смартфон iPhone 13", "price": 79999.99, "category": "Телефоны"},
-    {"name": "Стиральная машина Bosch", "price": 39999.50, "category": "Бытовая электроника"},
-    {"name": "Ноутбук ASUS ROG", "price": 129999.00, "category": "Ноутбуки"},
-    {"name": "Смартфон Xiaomi Redmi Note 10", "price": 19999.99, "category": "Телефоны"},
-    {"name": "Микроволновая печь Samsung", "price": 9999.50, "category": "Бытовая электроника"},
-    {"name": "Ноутбук HP Pavilion", "price": 59999.00, "category": "Ноутбуки"}
-]
-
-class Product:
-    def __init__(self, name: str, price: float, category: str):
+class Electronics:
+    def __init__(self, name: str, price: float, warranty_period: int):
         self.name = name
         self.price = price
-        self.category = category
+        self.warranty_period = warranty_period  # Гарантийный срок в месяцах
 
-    def __eq__(self, other: 'Product') -> bool:
-        if not isinstance(other, Product):
-            return NotImplemented
-        return self.price == other.price
 
-    def __lt__(self, other: 'Product') -> bool:
-        if not isinstance(other, Product):
-            return NotImplemented
-        return self.price < other.price
-
-    def __le__(self, other: 'Product') -> bool:
-        if not isinstance(other, Product):
-            return NotImplemented
-        return self.price <= other.price
+class Furniture:
+    # атрибукт класса содержащий классы, с кем мы можем делать сравнение
     
 
-# Десериализация - процесс преобразования данных из внешнего представления в рабочий формат.
-products = [Product(p['name'], p['price'], p['category']) for p in products]
+    def __init__(self, name: str, price: float, material: str):
+        self.name = name
+        self.price = price
+        self.material = material  # Материал изготовления
+        self.comparison_classes = (Electronics, Furniture)
 
 
-# это позволит сделать сортировку объектов Product.
-# Давайте проверим:
+    def __eq__(self, other) -> bool:
+        """
+        тут может быть более сложная логика сравния, и она может быть разной для разных классов
+        """
+        if not any(isinstance(other, class_name) for class_name in self.comparison_classes):
+            return NotImplemented
+        
+        if not hasattr(other, 'price'):
+            return NotImplemented
+        return self.price == other.price
+    
 
-sorted_products = sorted(products)
+f1 = Furniture('Стол', 1000, 'Дерево')
+f2 = Furniture('Стул', 1000, 'Дерево')
 
-print("Отсортированные продукты по цене:")
-for product in sorted_products:
-    print(f"{product.name}: {product.price}")
+e1 = Electronics('Телефон', 1000, 12)
+print(f1==f2)
+print(f1==e1)
 
-print("Отсортированные продукты по названию:")
-# Давайте сортиртировать это по алфавиту (через лямбду)
-sorted_products = sorted(products, key=lambda product: product.name) # .split()[0] - чтобы сделать это по первому слову
-[print(product.name) for product in sorted_products]
-
-
-print('Сортируем по 2 признакам, категория, и цена')
-
-sorted_products = sorted(products, key=lambda product: (product.category, product.price))
-[print(product.name, product.category, product.price) for product in sorted_products]
+print(e1==f1)
