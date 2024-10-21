@@ -67,6 +67,10 @@ class AbstractProduct(ABC):
     def __str__(self):
         pass
 
+    @abstractmethod
+    def __repr__(self):
+        pass
+
 
 class Electronics(AbstractProduct):
     def __init__(self, name: str, category: str, height: float, width: float, depth: float, weight: float, availability: bool, price: float, warranty_period: int):
@@ -75,6 +79,10 @@ class Electronics(AbstractProduct):
 
     def __str__(self):
         return f"{self.name} ({self.category}) - {self.price} руб., Гарантия: {self.warranty_period} месяцев"
+    
+    def __repr__(self):
+        return f"Electronics(name='{self.name}', category='{self.category}', height={self.height}, width={self.width}, depth={self.depth}, weight={self.weight}, availability={self.availability}, price={self.price}, warranty_period={self.warranty_period})"
+
 
 
 class Furniture(AbstractProduct):
@@ -84,7 +92,9 @@ class Furniture(AbstractProduct):
 
     def __str__(self):
         return f"{self.name} ({self.category}) - {self.price} руб., Материал: {self.material}"
-
+    
+    def __repr__(self):
+        return f"Furniture(name='{self.name}', category='{self.category}', height={self.height}, width={self.width}, depth={self.depth}, weight={self.weight}, availability={self.availability}, price={self.price}, material='{self.material}')"
 
 electronics_data = [
     {
@@ -143,8 +153,6 @@ electronics_data = [
         "warranty_period": 60
     }
 ]
-
-
 
 furniture_data = [
     {
@@ -207,3 +215,23 @@ furniture_data = [
 
 electronics_products = [Electronics(**data) for data in electronics_data]
 furniture_products = [Furniture(**data) for data in furniture_data]
+
+# правльный репр будет возвращать "Furniture(name=Левитирующий диван, category=Мягкая мебель, height=1.0, width=2.5, depth=1.0, weight=50.0, availability=True, price=300000.0, material=Антигравитационный текстиль)"
+
+quantum_computer  = electronics_products[0]
+levitating_sofa = furniture_products[0]
+
+# Сериализация объектов в строку с помощью repr()
+quantum_computer_str = repr(quantum_computer)
+levitating_sofa_str = repr(levitating_sofa)
+
+print(quantum_computer_str)
+print(levitating_sofa_str)
+
+# Десериализация объектов из строки с помощью eval()
+quantum_computer_obj = eval(quantum_computer_str)
+levitating_sofa_obj = eval(levitating_sofa_str)
+eval("print('Привет из eval!')")
+
+print(quantum_computer_obj)
+print(levitating_sofa_obj)
