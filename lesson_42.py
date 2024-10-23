@@ -41,50 +41,50 @@ In-place операции изменяют исходный объект, а о�
 # __imod__(self, other) -> %=  # остаток от деления с присваиванием
 # __ipow__(self, other) -> **=  # возведение в степень с присваиванием
 
-class Pizza:
-    def __init__(self, size):
-        self.size = size
+# class Pizza:
+#     def __init__(self, size):
+#         self.size = size
     
-    def __add__(self, other):
-        """Создает новую пиццу с суммой размеров"""
-        if not isinstance(other, Pizza):
-            raise TypeError("Можно складывать только пиццы между собой")
-        return Pizza(self.size + other.size)
+#     def __add__(self, other):
+#         """Создает новую пиццу с суммой размеров"""
+#         if not isinstance(other, Pizza):
+#             raise TypeError("Можно складывать только пиццы между собой")
+#         return Pizza(self.size + other.size)
     
-    def __iadd__(self, other):
-        """Создает новую пиццу с суммой размеров (in-place операция)"""
-        if not isinstance(other, Pizza):
-            raise TypeError("Можно складывать только пиццы между собой")
-        return Pizza(self.size + other.size)    
-    def __str__(self):
-        return f"Пицца размера {self.size} см. ID: {id(self)}"
+#     def __iadd__(self, other):
+#         """Создает новую пиццу с суммой размеров (in-place операция)"""
+#         if not isinstance(other, Pizza):
+#             raise TypeError("Можно складывать только пиццы между собой")
+#         return Pizza(self.size + other.size)    
+#     def __str__(self):
+#         return f"Пицца размера {self.size} см. ID: {id(self)}"
 
 
 # Пример использования
-pizza1 = Pizza(30)  # пицца диаметром 30 см
-pizza2 = Pizza(25)  # пицца диаметром 25 см
+# pizza1 = Pizza(30)  # пицца диаметром 30 см
+# pizza2 = Pizza(25)  # пицца диаметром 25 см
 
 # Обычное сложение
-pizza3 = pizza1 + pizza2
-print(pizza3)  # Пицца размера 55
+# pizza3 = pizza1 + pizza2
+# print(pizza3)  # Пицца размера 55
 
-print(pizza1)
+# print(pizza1)
 # In-place сложение
-pizza1 += pizza2
-print(pizza1)  # Пицца размера 55
+# pizza1 += pizza2
+# print(pizza1)  # Пицца размера 55
 
 ### Проверим, а что происходит со строками на инплейс операциях
 
 
-product = "чебурек"
-print(id(product))
-product += "из кот"
-print(id(product))
+# product = "чебурек"
+# print(id(product))
+# product += "из кот"
+# print(id(product))
 
-some_num = 1
-print(id(some_num))
-some_num += 1
-print(id(some_num))
+# some_num = 1
+# print(id(some_num))
+# some_num += 1
+# print(id(some_num))
 
 """
 Мутабельность коллекций в Python:
@@ -109,10 +109,102 @@ print(id(some_num))
 
 Пример с list (мутабельный):
 """
-some_list = [1, 2, 3]
-print(id(some_list))  # id сохраняется
-some_list += [4, 5]   # изменяем список
-print(id(some_list))  # id остается тем же
+# some_list = [1, 2, 3]
+# print(id(some_list))  # id сохраняется
+# some_list += [4, 5]   # изменяем список
+# print(id(some_list))  # id остается тем же
 
 # При работе с изменяемыми коллекциями важно помнить о побочных эффектах
 # при передаче их в функции или при создании копий
+
+
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import List
+
+@dataclass
+class AbstractProduct(ABC):
+    name: str
+    category: str
+    price: float
+    availability: bool
+
+@dataclass
+class Electronics(AbstractProduct):
+    height: float
+    width: float
+    depth: float
+    weight: float
+    warranty_period: int
+
+@dataclass
+class Furniture(AbstractProduct):
+    height: float
+    width: float
+    depth: float
+    weight: float
+    material: str
+
+class ShoppingCart:
+    def __init__(self):
+        self.items: List[AbstractProduct] = []
+        self.total: float = 0.0
+
+    def __add__(self, other: AbstractProduct) -> 'ShoppingCart':
+        if not isinstance(other, AbstractProduct):
+            raise TypeError("Можно добавлять только товары")
+        if other.availability:
+            self.items.append(other)
+            self.total += other.price
+        return self
+
+    def __sub__(self, other: AbstractProduct) -> 'ShoppingCart':
+        if not isinstance(other, AbstractProduct):
+            raise TypeError("Можно удалять только товары")
+        if other in self.items:
+            self.items.remove(other)
+            self.total -= other.price
+        return self
+
+    def __str__(self) -> str:
+        cart_contents = "\n".join([f"- {item.name}: {item.price}" for item in self.items])
+        return f"Корзина:\n{cart_contents}\nИтого: {self.total}"
+
+# Пример использования:
+def create_sample_products():
+    tv = Electronics(
+        name="Квантовый компьютер",
+        category="Суперкомпьютеры",
+        price=10000000.0,
+        availability=True,
+        height=2.5,
+        width=3.0,
+        depth=1.5,
+        weight=500.0,
+        warranty_period=24
+    )
+    
+    sofa = Furniture(
+        name="Левитирующий диван",
+        category="Мягкая мебель",
+        price=300000.0,
+        availability=True,
+        height=1.0,
+        width=2.5,
+        depth=1.0,
+        weight=50.0,
+        material="Антигравитационный текстиль"
+    )
+    
+    return tv, sofa
+
+# Использование:
+cart = ShoppingCart()
+tv, sofa = create_sample_products()
+
+cart += tv  # добавляем телевизор
+print(cart)
+cart += sofa  # добавляем диван
+print(cart)
+cart -= tv  # удаляем телевизор
+print(cart)
