@@ -15,6 +15,7 @@ Lesson 42.
 Абстрактные датаклассы и наследование в dataclass
   
 """
+
 # Чем in-place мат. операция отличается от обычной?
 
 """
@@ -44,18 +45,18 @@ In-place операции изменяют исходный объект, а о�
 # class Pizza:
 #     def __init__(self, size):
 #         self.size = size
-    
+
 #     def __add__(self, other):
 #         """Создает новую пиццу с суммой размеров"""
 #         if not isinstance(other, Pizza):
 #             raise TypeError("Можно складывать только пиццы между собой")
 #         return Pizza(self.size + other.size)
-    
+
 #     def __iadd__(self, other):
 #         """Создает новую пиццу с суммой размеров (in-place операция)"""
 #         if not isinstance(other, Pizza):
 #             raise TypeError("Можно складывать только пиццы между собой")
-#         return Pizza(self.size + other.size)    
+#         return Pizza(self.size + other.size)
 #     def __str__(self):
 #         return f"Пицца размера {self.size} см. ID: {id(self)}"
 
@@ -122,12 +123,15 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import List
 
+
 @dataclass
 class AbstractProduct(ABC):
     name: str
     category: str
     price: float
     availability: bool
+    stores: List[str]
+
 
 @dataclass
 class Electronics(AbstractProduct):
@@ -137,6 +141,7 @@ class Electronics(AbstractProduct):
     weight: float
     warranty_period: int
 
+
 @dataclass
 class Furniture(AbstractProduct):
     height: float
@@ -145,12 +150,13 @@ class Furniture(AbstractProduct):
     weight: float
     material: str
 
+
 class ShoppingCart:
     def __init__(self):
         self.items: List[AbstractProduct] = []
         self.total: float = 0.0
 
-    def __add__(self, other: AbstractProduct) -> 'ShoppingCart':
+    def __add__(self, other: AbstractProduct) -> "ShoppingCart":
         if not isinstance(other, AbstractProduct):
             raise TypeError("Можно добавлять только товары")
         if other.availability:
@@ -158,7 +164,7 @@ class ShoppingCart:
             self.total += other.price
         return self
 
-    def __sub__(self, other: AbstractProduct) -> 'ShoppingCart':
+    def __sub__(self, other: AbstractProduct) -> "ShoppingCart":
         if not isinstance(other, AbstractProduct):
             raise TypeError("Можно удалять только товары")
         if other in self.items:
@@ -167,9 +173,12 @@ class ShoppingCart:
         return self
 
     def __str__(self) -> str:
-        cart_contents = "\n".join([f"- {item.name}: {item.price}" for item in self.items])
+        cart_contents = "\n".join(
+            [f"- {item.name}: {item.price}" for item in self.items]
+        )
         return f"Корзина:\n{cart_contents}\nИтого: {self.total}"
 
+shared_stores = ["Остап и КО", "Рога и Копыта", "Сбермаркет"]
 # Пример использования:
 def create_sample_products():
     tv = Electronics(
@@ -177,34 +186,83 @@ def create_sample_products():
         category="Суперкомпьютеры",
         price=10000000.0,
         availability=True,
+        stores=shared_stores,
         height=2.5,
         width=3.0,
         depth=1.5,
         weight=500.0,
-        warranty_period=24
+        warranty_period=24,
     )
-    
+
     sofa = Furniture(
         name="Левитирующий диван",
         category="Мягкая мебель",
         price=300000.0,
         availability=True,
+        stores=["Диваны Галактики", "Фабрика Остапа", "Мебельный ад"],
         height=1.0,
         width=2.5,
         depth=1.0,
         weight=50.0,
-        material="Антигравитационный текстиль"
+        material="Антигравитационный текстиль",
     )
-    
+
     return tv, sofa
+
 
 # Использование:
 cart = ShoppingCart()
 tv, sofa = create_sample_products()
 
-cart += tv  # добавляем телевизор
-print(cart)
-cart += sofa  # добавляем диван
-print(cart)
-cart -= tv  # удаляем телевизор
-print(cart)
+# cart += tv  # добавляем телевизор
+# print(cart)
+# cart += sofa  # добавляем диван
+# print(cart)
+# cart -= tv  # удаляем телевизор
+# print(cart)
+# print(tv.stores)
+# print(sofa.stores)
+
+
+electornics = [
+    {
+        "name": "Голографический проектор",
+        "category": "Устройства отображения",
+        "height": 0.5,
+        "width": 0.5,
+        "depth": 0.3,
+        "weight": 2.0,
+        "availability": True,
+        "stores": shared_stores,
+        "price": 200000.0,
+        "warranty_period": 18,
+    },
+    {
+        "name": "Нейроинтерфейс",
+        "category": "Устройства ввода",
+        "height": 0.1,
+        "width": 0.2,
+        "depth": 0.05,
+        "weight": 0.1,
+        "availability": False,
+        "stores": shared_stores,
+        "price": 500000.0,
+        "warranty_period": 12,
+    },
+]
+
+electronics = [Electronics(**item) for item in electornics] + [tv]
+
+# Демонстрация проблемы
+print("Исходные списки магазинов:")
+[print(f"{item.name}: {item.stores}") for item in electronics]
+
+# Изменяем список магазинов у одного объекта
+electronics[0].stores.append("Новый магазин")
+
+print("\nСписки магазинов после изменения:")
+[print(f"{item.name}: {item.stores}") for item in electronics]
+
+# Проблема: изменение списка магазинов у одного объекта отражается на всех объектах
+# ПРИ УСЛОВИИ что изначально мы передали магазины в виде переменной, а не самостоятельных списков
+
