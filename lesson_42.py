@@ -15,7 +15,7 @@ Lesson 42.
 Абстрактные датаклассы и наследование в dataclass
   
 """
-
+import json
 # Чем in-place мат. операция отличается от обычной?
 
 """
@@ -332,4 +332,59 @@ st2 = Student("Ирина", 20)
 
 print(st1 <= st2)
 
-# 
+# Напишем датакласс для игры в города
+"""
+lat
+lon
+district
+name
+population
+subject
+is_used
+"""
+
+@dataclass(slots=True)
+class City:
+    lat: float = field(compare=False)
+    lon: float = field(compare=False)
+    district: str = field(compare=False)
+    name: str
+    population: int = field(compare=False)
+    subject: str = field(compare=False)
+    is_used: bool = field(compare=False, default=False)
+
+
+city = City(lat=55.7558, lon=37.6173, district="Центральный административный округ", name="Москва", population=12615882, subject="Москва")
+
+import sys
+from pympler import asizeof # pip install pympler
+# Читаем из файла ./dataset/cities.json
+with open("./dataset/cities.json", "r", encoding="utf-8") as f:
+    data = json.load(f)
+
+# Замер до создания списка
+memory_before = sys.getsizeof([])
+
+# Создаем список объектов City 
+cities = [City(
+    lat=float(item["coords"]["lat"]),
+    lon=float(item["coords"]["lon"]),
+    district=item["district"],
+    name=item["name"],
+    population=item["population"],
+    subject=item["subject"]
+) for item in data]
+
+print(cities[0])
+
+# Замер после создания списка
+memory_after = sys.getsizeof(cities)
+
+print(f"Использовано памяти: {memory_after - memory_before} байт")
+
+# Замер с pympler
+memory_size = asizeof.asizeof(cities)
+print(f"Полный размер в памяти: {memory_size} байт")
+
+# Полный размер в памяти: 586864 байт без слотов
+# Полный размер в памяти: 486896 байт 
