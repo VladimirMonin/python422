@@ -12,11 +12,11 @@ from typing import Optional
 
 @dataclass
 class OpenAISettings:
-    api_key: str = "API KEY"
+    api_key: str = "КЛЮЧ"
     base_url: str = "https://api.vsegpt.ru/v1"
     model: str = "openai/gpt-4o-mini"
     temperature: float = 1.0
-    max_tokens: int = 4000
+    max_tokens: int = 100
 
 class OpenAIRequester:
     def __init__(self, settings: OpenAISettings):
@@ -44,14 +44,23 @@ class OpenAIFacade:
         self.settings = settings or OpenAISettings()
         self.requester = OpenAIRequester(self.settings)
     
-    def run(self):
-        prompt = input("О чем хотите спросить? ")
+    def run(self, prompt: str, history: list|None = None):
+
+        if history:
+            prompt = '\n'.join(history) + '\n' + prompt
         response = self.requester(prompt)
-        ("Ответ:", response)
+        return response
 
 if __name__ == "__main__":
     facade = OpenAIFacade()
-    facade.run()
+    history = []
+    while True:
+        prompt = input("Запрос: ")
+        response = facade.run(prompt, history)
+        print(response)
+        print('-----------------------------------')
+        history.append(response)
+    
 
 
 # # Базовое использование
