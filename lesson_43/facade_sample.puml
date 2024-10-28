@@ -1,0 +1,68 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class SmartHomeFacade {
+  +leaveHome()
+  +eveningMode()
+  +movieMode()
+  +morningMode()
+}
+
+class LightingSystem {
+  -lights: Map<Room, Light>
+  +turnOn(room: Room)
+  +turnOff(room: Room)
+  +setBrightness(room: Room, level: int)
+  +setColor(room: Room, color: Color)
+}
+
+class ClimateSystem {
+  -temperature: float
+  -humidity: float
+  +setTemperature(temp: float)
+  +setHumidity(level: float)
+  +turnOnVentilation()
+  +turnOffVentilation()
+}
+
+class SecuritySystem {
+  -isArmed: boolean
+  +arm()
+  +disarm()
+  +checkMotion()
+  +lockDoors()
+}
+
+class MediaSystem {
+  -volume: int
+  +playMusic(playlist: String)
+  +stopMusic()
+  +turnOnTV()
+  +turnOffTV()
+}
+
+class BlindsSystem {
+  -position: int
+  +open()
+  +close()
+  +setPosition(level: int)
+}
+
+SmartHomeFacade --> LightingSystem
+SmartHomeFacade --> ClimateSystem
+SmartHomeFacade --> SecuritySystem
+SmartHomeFacade --> MediaSystem
+SmartHomeFacade --> BlindsSystem
+
+note "Легенда:\n\
+• SmartHomeFacade - главный класс-фасад\n\
+• LightingSystem - управление освещением\n\
+• ClimateSystem - климат-контроль\n\
+• SecuritySystem - система безопасности\n\
+• MediaSystem - мультимедиа система\n\
+• BlindsSystem - управление шторами\n\
+\n\
+Стрелки показывают зависимости\n\
+Фасад использует все подсистемы" as Legend
+
+@enduml
