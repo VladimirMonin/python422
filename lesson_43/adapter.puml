@@ -1,0 +1,99 @@
+@startuml
+skinparam backgroundColor white
+skinparam handwritten false
+
+legend right
+  |Color|Meaning|
+  |<#98FB98>|Target Interface|
+  |<#87CEEB>|Client Code|
+  |<#FFB6C1>|External Payment Systems|
+  |<#DDA0DD>|Adapters|
+endlegend
+
+interface PaymentService {
+    +processPayment(amount: decimal): PaymentResult
+    +refund(transactionId: string): RefundResult
+}
+
+class PaymentProcessor {
+    +executePayment(payment: Payment)
+}
+
+class StripeGateway {
+    +charge(amount: decimal, currency: string)
+    +createRefund(chargeId: string)
+}
+
+class PayPalGateway {
+    +makePayment(sum: decimal)
+    +returnMoney(paymentId: string)
+}
+
+class StripeAdapter {
+    -stripeGateway: StripeGateway
+    +processPayment(amount: decimal)
+    +refund(transactionId: string)
+}
+
+class PayPalAdapter {
+    -paypalGateway: PayPalGateway
+    +processPayment(amount: decimal)
+    +refund(transactionId: string)
+}
+
+PaymentService <|.. StripeAdapter
+PaymentService <|.. PayPalAdapter
+PaymentProcessor --> PaymentService
+StripeAdapter --> StripeGateway
+PayPalAdapter --> PayPalGateway
+
+note right of PaymentService
+  Target (Целевой интерфейс)
+  Определяет общий контракт
+  для всех платежных операций
+end note
+
+note right of PaymentProcessor
+  Client (Клиент)
+  Использует платежный сервис
+  через единый интерфейс
+end note
+
+note right of StripeGateway
+  Adaptee (Адаптируемый класс)
+  Внешний API Stripe со своими
+  специфичными методами
+end note
+
+note right of PayPalGateway
+  Adaptee (Адаптируемый класс)
+  Внешний API PayPal со своими
+  специфичными методами
+end note
+
+note right of StripeAdapter
+  Adapter (Адаптер)
+  Преобразует общий интерфейс
+  в вызовы Stripe API
+end note
+
+note right of PayPalAdapter
+  Adapter (Адаптер)
+  Преобразует общий интерфейс
+  в вызовы PayPal API
+end note
+
+skinparam class {
+    BackgroundColor<<Target>> #98FB98
+    BackgroundColor<<Client>> #87CEEB
+    BackgroundColor<<External>> #FFB6C1
+    BackgroundColor<<Adapter>> #DDA0DD
+}
+
+PaymentService <<Target>>
+PaymentProcessor <<Client>>
+StripeGateway <<External>>
+PayPalGateway <<External>>
+StripeAdapter <<Adapter>>
+PayPalAdapter <<Adapter>>
+@enduml

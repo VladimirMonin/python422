@@ -1,5 +1,12 @@
 @startuml
 skinparam classAttributeIconSize 0
+skinparam backgroundColor white
+
+legend right
+  |Color|Meaning|
+  |<#98FB98>|Facade|
+  |<#87CEEB>|Subsystems|
+endlegend
 
 class SmartHomeFacade {
   +leaveHome()
@@ -54,15 +61,53 @@ SmartHomeFacade --> SecuritySystem
 SmartHomeFacade --> MediaSystem
 SmartHomeFacade --> BlindsSystem
 
-note "Легенда:\n\
-• SmartHomeFacade - главный класс-фасад\n\
-• LightingSystem - управление освещением\n\
-• ClimateSystem - климат-контроль\n\
-• SecuritySystem - система безопасности\n\
-• MediaSystem - мультимедиа система\n\
-• BlindsSystem - управление шторами\n\
-\n\
-Стрелки показывают зависимости\n\
-Фасад использует все подсистемы" as Legend
+note bottom of SmartHomeFacade
+  Facade (Фасад)
+  Предоставляет простой интерфейс
+  для управления всем умным домом.
+  Скрывает сложность взаимодействия
+  подсистем
+end note
 
+note bottom of LightingSystem
+  Subsystem (Подсистема освещения)
+  Управляет всеми источниками света
+  в доме, их яркостью и цветом
+end note
+
+note bottom of ClimateSystem
+  Subsystem (Подсистема климата)
+  Отвечает за температуру, влажность
+  и вентиляцию в помещениях
+end note
+
+note bottom of SecuritySystem
+  Subsystem (Подсистема безопасности)
+  Контролирует охрану, датчики движения
+  и замки дверей
+end note
+
+note bottom of MediaSystem
+  Subsystem (Мультимедиа подсистема)
+  Управляет воспроизведением музыки
+  и работой телевизора
+end note
+
+note bottom of BlindsSystem
+  Subsystem (Подсистема штор)
+  Контролирует положение штор
+  и жалюзи в доме
+end note
+
+skinparam class {
+    BackgroundColor<<Facade>> #98FB98
+    BackgroundColor<<Subsystem>> #87CEEB
+}
+
+SmartHomeFacade <<Facade>>
+LightingSystem <<Subsystem>>
+ClimateSystem <<Subsystem>>
+SecuritySystem <<Subsystem>>
+MediaSystem <<Subsystem>>
+BlindsSystem <<Subsystem>>
 @enduml
