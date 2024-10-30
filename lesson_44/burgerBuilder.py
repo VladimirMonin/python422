@@ -31,7 +31,6 @@ add_ingredients() - добавляет все ингредиенты
 Ожидаемый результат
 При запуске программы должны создаваться и выводиться на экран составы двух разных бургеров.
 """
-
 class Burger():
     """
     Продукт - бургер
@@ -44,7 +43,7 @@ class Burger():
 
     def __str__(self) -> str:
         return f"Булочка: {self.bun}, котлета: {self.patty}, сыр: {self.cheese}, соус: {self.sauce}"
-    
+
 
 class CheeseburgerBuilder():
     """
@@ -52,6 +51,9 @@ class CheeseburgerBuilder():
     """
     def __init__(self) -> None:
         self.burger: Burger = Burger()
+
+    def reset(self) -> None:
+        self.burger = Burger()
 
     def add_bun(self) -> None:
             self.burger.bun = "Булочка для чизбургера"
@@ -61,14 +63,14 @@ class CheeseburgerBuilder():
 
     def add_cheese(self) -> None:
             self.burger.cheese = "Сыр Чеддер"
-    
+
     def add_sauce(self) -> None:
             self.burger.sauce = "Соус бургер"
 
     def add_cheese_pull(self):
         def cheese_pull():
             print("Сыр тянется золотистыми ароматными нитями...")
-        
+    
         self.burger.cheese_pull = cheese_pull
 
     def add_ingredients(self) -> None:
@@ -79,6 +81,7 @@ class CheeseburgerBuilder():
         self.add_cheese_pull() # Добавляем секретный метод
 
     def build(self) -> Burger:
+        self.reset()
         self.add_ingredients()
         return self.burger
     
@@ -88,7 +91,10 @@ class FishburgerBuilder():
     """
     def __init__(self) -> None:
         self.burger: Burger = Burger()
-    
+
+    def reset(self) -> None:
+        self.burger = Burger()
+
     def add_bun(self) -> None:
             self.burger.bun = "Булочка для фишбургера"
 
@@ -97,7 +103,7 @@ class FishburgerBuilder():
 
     def add_cheese(self) -> None:
             self.burger.cheese = "Сыр Чеддер"
-    
+
     def add_sauce(self) -> None:
             self.burger.sauce = "Соус фишбургер"
 
@@ -108,6 +114,7 @@ class FishburgerBuilder():
         self.add_sauce()
 
     def build(self) -> Burger:
+        self.reset()
         self.add_ingredients()
         return self.burger
     
