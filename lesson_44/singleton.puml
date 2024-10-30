@@ -1,0 +1,73 @@
+@startuml
+
+skinparam backgroundColor white
+skinparam handwritten false
+
+legend right
+  |Color|Meaning|
+  |<#98FB98>|Singleton Instance|
+  |<#87CEEB>|Client Code|
+  |<#DDA0DD>|Configuration|
+endlegend
+
+class DatabaseConnection {
+    -instance: DatabaseConnection
+    -connection: Connection
+    -constructor()
+    +{static} getInstance(): DatabaseConnection
+    +executeQuery(sql: string)
+    +connect()
+    +disconnect()
+}
+
+class ConfigurationManager {
+    -instance: ConfigurationManager
+    -settings: Map
+    -constructor()
+    +{static} getInstance(): ConfigurationManager
+    +getSetting(key: string)
+    +setSetting(key: string, value: any)
+}
+
+class Application {
+    +main()
+    +processData()
+}
+
+DatabaseConnection --> "1" DatabaseConnection : instance
+ConfigurationManager --> "1" ConfigurationManager : instance
+Application --> DatabaseConnection
+Application --> ConfigurationManager
+
+note right of DatabaseConnection
+  Singleton
+  Обеспечивает единственное
+  подключение к базе данных
+  во всем приложении
+end note
+
+note right of ConfigurationManager
+  Singleton
+  Хранит глобальные настройки
+  приложения в единственном
+  экземпляре
+end note
+
+note right of Application
+  Client
+  Использует одиночек для
+  доступа к общим ресурсам
+  приложения
+end note
+
+skinparam class {
+    BackgroundColor<<Singleton>> #98FB98
+    BackgroundColor<<Client>> #87CEEB
+    BackgroundColor<<Config>> #DDA0DD
+}
+
+DatabaseConnection <<Singleton>>
+ConfigurationManager <<Config>>
+Application <<Client>>
+
+@enduml

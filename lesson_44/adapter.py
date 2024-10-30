@@ -74,7 +74,7 @@ def main():
     openai = OpenAIAdapter(OpenAIAPI())
     
     # Используем оба API через единый интерфейс
-    prompt = "Расскажи о паттерне Адаптер"
+    prompt = input('Задайте ваш вопрос модели ИИ:')
     
     process_with_ai(anthropic, prompt)
     process_with_ai(openai, prompt)
