@@ -1,0 +1,70 @@
+@startuml
+skinparam backgroundColor white
+skinparam handwritten false
+
+legend right
+  |Color|Meaning|
+  |<#98FB98>|Prototype Interface|
+  |<#87CEEB>|Client Code|
+  |<#DDA0DD>|Concrete Prototypes|
+endlegend
+
+interface Prototype {
+    +clone(): Prototype
+}
+
+class Client {
+    +operation()
+}
+
+class ConcretePrototype1 {
+    -field1: type
+    -field2: type
+    +clone(): Prototype
+}
+
+class ConcretePrototype2 {
+    -field1: type
+    -field2: type
+    +clone(): Prototype
+}
+
+Prototype <|.. ConcretePrototype1
+Prototype <|.. ConcretePrototype2
+Client --> Prototype
+
+note right of Prototype
+  Prototype (Прототип)
+  Определяет интерфейс для
+  клонирования объектов
+end note
+
+note right of Client
+  Client (Клиент)
+  Создает новые объекты путем
+  клонирования существующих прототипов
+end note
+
+note right of ConcretePrototype1
+  Concrete Prototype (Конкретный прототип)
+  Реализует операцию клонирования
+  для создания копии самого себя
+end note
+
+note right of ConcretePrototype2
+  Concrete Prototype (Конкретный прототип)
+  Другая реализация прототипа
+  с собственными данными
+end note
+
+skinparam class {
+    BackgroundColor<<Interface>> #98FB98
+    BackgroundColor<<Client>> #87CEEB
+    BackgroundColor<<Prototype>> #DDA0DD
+}
+
+Prototype <<Interface>>
+Client <<Client>>
+ConcretePrototype1 <<Prototype>>
+ConcretePrototype2 <<Prototype>>
+@enduml

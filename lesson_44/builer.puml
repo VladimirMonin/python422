@@ -1,0 +1,99 @@
+@startuml
+skinparam backgroundColor white
+skinparam handwritten false
+
+legend right
+  |Color|Meaning|
+  |<#98FB98>|Builder Interface|
+  |<#87CEEB>|Director & Product|
+  |<#DDA0DD>|Concrete Builders|
+endlegend
+
+class Product {
+    -parts: List
+    +addPart(part: string)
+    +showParts()
+}
+
+class Director {
+    -builder: Builder
+    +setBuilder(builder: Builder)
+    +constructBasicProduct()
+    +constructFullProduct()
+}
+
+interface Builder {
+    +reset()
+    +buildPartA()
+    +buildPartB()
+    +buildPartC()
+    +getResult(): Product
+}
+
+class ConcreteBuilder1 {
+    -product: Product
+    +reset()
+    +buildPartA()
+    +buildPartB()
+    +buildPartC()
+    +getResult(): Product
+}
+
+class ConcreteBuilder2 {
+    -product: Product
+    +reset()
+    +buildPartA()
+    +buildPartB()
+    +buildPartC()
+    +getResult(): Product
+}
+
+Builder <|.. ConcreteBuilder1
+Builder <|.. ConcreteBuilder2
+Director o-- Builder
+ConcreteBuilder1 ..> Product
+ConcreteBuilder2 ..> Product
+
+note right of Builder
+  Builder (Строитель)
+  Объявляет интерфейс для
+  пошагового создания продукта
+end note
+
+note right of Director
+  Director (Директор)
+  Определяет порядок вызова
+  строительных шагов для создания
+  различных конфигураций продукта
+end note
+
+note right of Product
+  Product (Продукт)
+  Конечный объект, который
+  создается по частям
+end note
+
+note right of ConcreteBuilder1
+  Concrete Builder (Конкретный строитель)
+  Реализует пошаговое создание
+  определенной версии продукта
+end note
+
+note right of ConcreteBuilder2
+  Concrete Builder (Конкретный строитель)
+  Альтернативная реализация
+  создания другой версии продукта
+end note
+
+skinparam class {
+    BackgroundColor<<Interface>> #98FB98
+    BackgroundColor<<Main>> #87CEEB
+    BackgroundColor<<Builder>> #DDA0DD
+}
+
+Builder <<Interface>>
+Director <<Main>>
+Product <<Main>>
+ConcreteBuilder1 <<Builder>>
+ConcreteBuilder2 <<Builder>>
+@enduml
