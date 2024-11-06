@@ -1,0 +1,145 @@
+@startuml
+
+scale 800 width
+skinparam BackgroundColor f0faf5
+skinparam TitleFontColor 0b2e1d
+
+'Настройки для легенды
+skinparam LegendBackgroundColor f0faf5
+skinparam LegendBorderColor 294f3d
+
+'Настройки для стрелок
+skinparam ArrowColor 294f3d
+skinparam ArrowThickness 1
+skinparam ArrowFontColor 294f3d
+skinparam ArrowFontName Monospace
+
+'Настройки для классов
+skinparam ClassBorderColor #294f3d
+skinparam ClassFontColor #0b2e1d
+skinparam ClassBorderThickness 2
+
+title "Абстрактная фабрика: Создание игровых юнитов"
+
+interface "UnitFactory" as UF #b5beeb {
+    Абстрактная фабрика юнитов
+    ---
+    + create_warrior(): Warrior
+    + create_archer(): Archer
+    + create_mage(): Mage
+}
+
+class "HumanFactory" as HF #4dd191 {
+    Фабрика человеческих юнитов
+    ---
+    + create_warrior(): HumanWarrior
+    + create_archer(): HumanArcher
+    + create_mage(): HumanMage
+}
+
+class "OrcFactory" as OF #4dd191 {
+    Фабрика орочьих юнитов
+    ---
+    + create_warrior(): OrcWarrior
+    + create_archer(): OrcArcher
+    + create_mage(): OrcShaman
+}
+
+interface "Warrior" as W #b5beeb {
+    Интерфейс воина
+    ---
+    + attack()
+    + defend()
+}
+
+interface "Archer" as A #b5beeb {
+    Интерфейс лучника
+    ---
+    + shoot()
+    + move()
+}
+
+interface "Mage" as M #b5beeb {
+    Интерфейс мага
+    ---
+    + cast_spell()
+    + heal()
+}
+
+class "HumanWarrior" as HW #98FB98 {
+    Человек-воин
+    ---
+    + attack()
+    + defend()
+}
+
+class "HumanArcher" as HA #98FB98 {
+    Человек-лучник
+    ---
+    + shoot()
+    + move()
+}
+
+class "HumanMage" as HM #98FB98 {
+    Человек-маг
+    ---
+    + cast_spell()
+    + heal()
+}
+
+class "OrcWarrior" as OW #98FB98 {
+    Орк-воин
+    ---
+    + attack()
+    + defend()
+}
+
+class "OrcArcher" as OA #98FB98 {
+    Орк-лучник
+    ---
+    + shoot()
+    + move()
+}
+
+class "OrcShaman" as OS #98FB98 {
+    Орк-шаман
+    ---
+    + cast_spell()
+    + heal()
+}
+
+class "GameWorld" as GW #e3c764 {
+    Игровой мир
+    ---
+    - unit_factory: UnitFactory
+    + create_army()
+}
+
+' Реализация и наследование
+UF <|.. HF
+UF <|.. OF
+W <|.. HW
+W <|.. OW
+A <|.. HA
+A <|.. OA
+M <|.. HM
+M <|.. OS
+
+' Зависимости
+GW o-- UF
+HF ..> HW
+HF ..> HA
+HF ..> HM
+OF ..> OW
+OF ..> OA
+OF ..> OS
+
+legend
+|= Цвет |= Тип элемента |
+|<back:#b5beeb>   | Интерфейсы и абстрактные классы |
+|<back:#e3c764>   | Основные контроллеры |
+|<back:#4dd191>   | Конкретные фабрики |
+|<back:#98FB98>   | Конкретные продукты |
+endlegend
+
+@enduml
