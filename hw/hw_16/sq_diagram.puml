@@ -1,0 +1,124 @@
+@startuml
+
+scale 500 width
+skinparam BackgroundColor f0faf5
+skinparam TitleFontColor  0b2e1d
+
+'Настройки для легенды
+skinparam LegendBackgroundColor f0faf5
+skinparam LegendBorderColor 294f3d
+
+'Настройки для стрелок
+skinparam ArrowColor 294f3d
+skinparam ArrowThickness 1
+skinparam ArrowFontColor 294f3d
+skinparam ArrowFontName Monospace
+
+' Настройки заметок
+skinparam NoteBackgroundColor #F0FFF0
+skinparam NoteBorderColor #98FB98
+skinparam NoteBorderThickness 2
+
+' Настройки для участников
+skinparam ParticipantBackgroundColor #F0FFF0
+skinparam ParticipantBorderColor #294f3d
+skinparam ParticipantFontColor #0b2e1d
+skinparam ParticipantBorderThickness 2
+skinparam ParticipantFontSize 13
+skinparam ParticipantFontStyle bold
+skinparam ParticipantPadding 20
+skinparam ParticipantRoundCorner 15
+
+' Настройки для акторов
+skinparam ActorBackgroundColor #F0FFF0
+skinparam ActorBorderColor #294f3d
+skinparam ActorFontColor #0b2e1d
+skinparam ActorBorderThickness 2
+
+' Настройки для разделов (== Инициация заказа ==)
+skinparam SequenceDividerBackgroundColor #d4e5d4
+skinparam SequenceDividerBorderColor #294f3d
+skinparam SequenceDividerBorderThickness 2
+skinparam SequenceDividerFontColor #0b2e1d
+skinparam SequenceDividerFontSize 15
+skinparam SequenceDividerFontStyle bold
+
+
+title Система автоматической проверки домашних заданий
+
+actor User as "Студент"
+participant AIProcessorFacade as "Фасад обработки"
+participant ArchiveProcessor as "Обработчик архивов"
+participant AIService as "ИИ сервис"
+participant ReportGenerator as "Генератор отчётов"
+participant FileSystem as "Файловая система"
+
+legend right
+|= Участник |= Описание |
+|<#F0FFF0> Студент | Отправляет работу на проверку |
+|<#F0FFF0> Фасад обработки | Координирует весь процесс проверки |
+|<#F0FFF0> Обработчик архивов | Распаковывает и обрабатывает архивы |
+|<#F0FFF0> ИИ сервис | Анализирует код с помощью ИИ |
+|<#F0FFF0> Генератор отчётов | Создаёт итоговый отчёт |
+|<#F0FFF0> Файловая система | Управляет файлами |
+endlegend
+
+== Отправка архива ==
+User -> AIProcessorFacade: Отправка ДЗ на проверку
+activate AIProcessorFacade
+
+== Обработка архива ==
+AIProcessorFacade -> ArchiveProcessor: Определение типа архива
+activate ArchiveProcessor
+
+alt Архив типа ZIP
+    ArchiveProcessor --> ArchiveProcessor: Проверка ZIP структуры
+    ArchiveProcessor --> ArchiveProcessor: Распаковка ZIP алгоритмом
+else Архив типа RAR
+    ArchiveProcessor --> ArchiveProcessor: Проверка RAR заголовков
+    ArchiveProcessor --> ArchiveProcessor: Распаковка RAR алгоритмом
+else Архив типа 7Z
+    ArchiveProcessor --> ArchiveProcessor: Проверка 7Z сигнатуры
+    ArchiveProcessor --> ArchiveProcessor: Распаковка LZMA алгоритмом
+end
+
+ArchiveProcessor --> AIProcessorFacade: Возврат списка файлов
+deactivate ArchiveProcessor
+
+== Работа с файлами ==
+AIProcessorFacade -> FileSystem: Запрос на чтение файлов
+activate FileSystem
+FileSystem --> FileSystem: Проверка прав доступа
+FileSystem --> FileSystem: Чтение содержимого
+FileSystem --> AIProcessorFacade: Возврат кода из файлов
+deactivate FileSystem
+
+== Анализ кода ==
+AIProcessorFacade -> AIService: Отправка кода на анализ
+activate AIService
+AIService --> AIService: Подготовка модели
+AIService --> AIService: Анализ качества кода
+AIService --> AIService: Поиск потенциальных ошибок
+AIService --> AIProcessorFacade: Результаты проверки
+deactivate AIService
+
+== Генерация отчета ==
+AIProcessorFacade -> ReportGenerator: Запрос на создание отчёта
+activate ReportGenerator
+ReportGenerator --> ReportGenerator: Форматирование данных
+ReportGenerator --> ReportGenerator: Создание структуры отчёта
+ReportGenerator --> AIProcessorFacade: Готовый отчёт
+deactivate ReportGenerator
+
+== Завершающие операции ==
+AIProcessorFacade -> FileSystem: Сохранение отчёта
+activate FileSystem
+AIProcessorFacade -> FileSystem: Очистка временных файлов
+FileSystem --> FileSystem: Проверка места на диске
+FileSystem --> AIProcessorFacade: Подтверждение операций
+deactivate FileSystem
+
+AIProcessorFacade -> User: Возврат результатов проверки
+deactivate AIProcessorFacade
+
+@enduml

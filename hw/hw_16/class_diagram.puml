@@ -1,0 +1,113 @@
+@startuml
+
+scale 800 width
+skinparam BackgroundColor f0faf5
+skinparam TitleFontColor 0b2e1d
+
+'Настройки для легенды
+skinparam LegendBackgroundColor f0faf5
+skinparam LegendBorderColor 294f3d
+
+'Настройки для стрелок
+skinparam ArrowColor 294f3d
+skinparam ArrowThickness 1
+skinparam ArrowFontColor 294f3d
+skinparam ArrowFontName Monospace
+
+'Настройки для классов
+skinparam ClassBorderColor #294f3d
+skinparam ClassFontColor #0b2e1d
+skinparam ClassBorderThickness 2
+
+title "Диаграмма классов системы проверки кода с использованием AI"
+
+interface "AIStrategy" as AIS #b5beeb {
+    Интерфейс для взаимодействия с AI сервисами
+    ---
+    + process_request(prompt: str, data: str): str
+}
+
+abstract "ProcessingState" as PS #b5beeb {
+    Абстрактный класс для реализации паттерна состояния
+    ---
+    + process(context: ProcessingContext, data: Any, ai_strategy: AIStrategy)
+}
+
+class "ProcessorConfig" as PC #e3c764 {
+    Конфигурация для подключения к AI сервису
+    ---
+    + api_provider: str
+    + api_key: str
+    + base_url: str
+    + model: str
+    + temperature: float
+}
+
+class "OpenAIStrategy" as OAI #4dd191 {
+    Реализация стратегии для работы с OpenAI API
+    ---
+    - client: OpenAI
+    - model: str
+    - temperature: float
+    + process_request()
+}
+
+class "UnpackState" as US #98FB98 {
+    Состояние распаковки архива с кодом
+    ---
+    - target_dir: str
+    + process()
+}
+
+class "AICheckState" as ACS #98FB98 {
+    Состояние проверки кода через AI
+    ---
+    - prompt: str
+    + process()
+}
+
+class "ReportState" as RS #98FB98 {
+    Состояние генерации итогового отчета
+    ---
+    - format: str
+    + process()
+}
+
+class "ProcessingContext" as PCT #4dd191 {
+    Контекст обработки для управления состояниями
+    ---
+    - state: ProcessingState
+    - data: Any
+    - results: Any
+    - archive_path: str
+    + process()
+}
+
+class "AIProcessorFacade" as APF #e3c764 {
+    Фасад для упрощения взаимодействия с системой
+    ---
+    - ai_strategy: AIStrategy
+    - context: ProcessingContext
+    + process_homework()
+}
+
+' Реализация и наследование
+AIS <|.. OAI
+PS <|-- US
+PS <|-- ACS
+PS <|-- RS
+
+' Композиция и агрегация
+APF *-- PCT
+PCT o-- PS
+OAI *-- PC
+
+legend
+|= Цвет |= Тип элемента |
+|<back:#b5beeb>   | Интерфейсы и абстрактные классы |
+|<back:#e3c764>   | Основные контроллеры |
+|<back:#4dd191>   | Базовые классы |
+|<back:#98FB98>   | Состояния обработки |
+endlegend
+
+@enduml
