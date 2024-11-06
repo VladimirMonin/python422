@@ -1,0 +1,78 @@
+@startuml
+
+scale 800 width
+skinparam BackgroundColor f0faf5
+skinparam TitleFontColor 0b2e1d
+
+'Настройки для легенды
+skinparam LegendBackgroundColor f0faf5
+skinparam LegendBorderColor 294f3d
+
+'Настройки для стрелок
+skinparam ArrowColor 294f3d
+skinparam ArrowThickness 1
+skinparam ArrowFontColor 294f3d
+skinparam ArrowFontName Monospace
+
+'Настройки для классов
+skinparam ClassBorderColor #294f3d
+skinparam ClassFontColor #0b2e1d
+skinparam ClassBorderThickness 2
+
+title "Диаграмма классов боевой системы персонажа (State Pattern)"
+
+abstract "CombatState" as CS #b5beeb {
+    Абстрактный класс состояния боя
+    ---
+    + attack(character: Character)
+    + switch_to_melee(character: Character)
+    + switch_to_ranged(character: Character)
+    + get_damage(): int
+}
+
+class "MeleeCombatState" as MCS #98FB98 {
+    Состояние ближнего боя
+    ---
+    + attack(character: Character)
+    + switch_to_melee(character: Character)
+    + switch_to_ranged(character: Character)
+    + get_damage(): int
+}
+
+class "RangedCombatState" as RCS #98FB98 {
+    Состояние дальнего боя
+    ---
+    + attack(character: Character)
+    + switch_to_melee(character: Character)
+    + switch_to_ranged(character: Character)
+    + get_damage(): int
+}
+
+class "Character" as CH #4dd191 {
+    Игровой персонаж (контекст)
+    ---
+    - state: CombatState
+    - name: str
+    - health: int
+    + attack()
+    + switch_to_melee()
+    + switch_to_ranged()
+    + set_combat_state(state: CombatState)
+    + get_combat_state(): CombatState
+}
+
+' Реализация и наследование
+CS <|-- MCS
+CS <|-- RCS
+
+' Композиция и агрегация
+CH o-- CS
+
+legend
+|= Цвет |= Тип элемента |
+|<back:#b5beeb>   | Абстрактные классы |
+|<back:#4dd191>   | Контекст |
+|<back:#98FB98>   | Конкретные состояния |
+endlegend
+
+@enduml
