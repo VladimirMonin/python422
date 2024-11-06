@@ -1,0 +1,83 @@
+@startuml
+
+scale 800 width
+skinparam BackgroundColor f0faf5
+skinparam TitleFontColor 0b2e1d
+
+'Настройки для легенды
+skinparam LegendBackgroundColor f0faf5
+skinparam LegendBorderColor 294f3d
+
+'Настройки для стрелок
+skinparam ArrowColor 294f3d
+skinparam ArrowThickness 1
+skinparam ArrowFontColor 294f3d
+skinparam ArrowFontName Monospace
+
+'Настройки для классов
+skinparam ClassBorderColor #294f3d
+skinparam ClassFontColor #0b2e1d
+skinparam ClassBorderThickness 2
+
+title "Диаграмма классов музыкального плеера (State Pattern)"
+
+abstract "PlayerState" as PS #b5beeb {
+    Абстрактный класс состояния плеера
+    ---
+    + play(player: MusicPlayer)
+    + pause(player: MusicPlayer)
+    + stop(player: MusicPlayer)
+}
+
+class "PlayingState" as PLS #98FB98 {
+    Состояние воспроизведения
+    ---
+    + play(player: MusicPlayer)
+    + pause(player: MusicPlayer)
+    + stop(player: MusicPlayer)
+}
+
+class "PausedState" as PAS #98FB98 {
+    Состояние паузы
+    ---
+    + play(player: MusicPlayer)
+    + pause(player: MusicPlayer)
+    + stop(player: MusicPlayer)
+}
+
+class "StoppedState" as SS #98FB98 {
+    Состояние остановки
+    ---
+    + play(player: MusicPlayer)
+    + pause(player: MusicPlayer)
+    + stop(player: MusicPlayer)
+}
+
+class "MusicPlayer" as MP #4dd191 {
+    Музыкальный плеер (контекст)
+    ---
+    - state: PlayerState
+    - current_track: str
+    + play()
+    + pause()
+    + stop()
+    + set_state(state: PlayerState)
+    + get_state(): PlayerState
+}
+
+' Реализация и наследование
+PS <|-- PLS
+PS <|-- PAS
+PS <|-- SS
+
+' Композиция и агрегация
+MP o-- PS
+
+legend
+|= Цвет |= Тип элемента |
+|<back:#b5beeb>   | Абстрактные классы |
+|<back:#4dd191>   | Контекст |
+|<back:#98FB98>   | Конкретные состояния |
+endlegend
+
+@enduml
