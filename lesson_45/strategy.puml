@@ -1,0 +1,83 @@
+@startuml
+
+scale 800 width
+skinparam BackgroundColor f0faf5
+skinparam TitleFontColor 0b2e1d
+
+'Настройки для легенды
+skinparam LegendBackgroundColor f0faf5
+skinparam LegendBorderColor 294f3d
+
+'Настройки для стрелок
+skinparam ArrowColor 294f3d
+skinparam ArrowThickness 1
+skinparam ArrowFontColor 294f3d
+skinparam ArrowFontName Monospace
+
+'Настройки для классов
+skinparam ClassBorderColor #294f3d
+skinparam ClassFontColor #0b2e1d
+skinparam ClassBorderThickness 2
+
+title "Паттерн Стратегия: Система дальних атак игровых персонажей"
+
+interface "RangedAttackStrategy" as RAS #b5beeb {
+    Интерфейс стратегии дальней атаки
+    ---
+    + execute_attack(distance: float): int
+    + get_max_range(): float
+}
+
+class "Character" as CHAR #4dd191 {
+    Базовый класс игрового персонажа
+    ---
+    - attack_strategy: RangedAttackStrategy
+    - name: str
+    - health: int
+    + attack(target_distance: float)
+    + set_attack_strategy()
+}
+
+class "BowAttackStrategy" as BOW #98FB98 {
+    Стратегия атаки луком
+    ---
+    - bow_damage: int
+    - max_range: float
+    + execute_attack()
+    + get_max_range()
+}
+
+class "MagicAttackStrategy" as MAGIC #98FB98 {
+    Стратегия атаки магией
+    ---
+    - spell_power: int
+    - mana_cost: int
+    - max_range: float
+    + execute_attack()
+    + get_max_range()
+}
+
+class "CrossbowAttackStrategy" as CROSS #98FB98 {
+    Стратегия атаки арбалетом
+    ---
+    - crossbow_damage: int
+    - reload_time: float
+    - max_range: float
+    + execute_attack()
+    + get_max_range()
+}
+
+' Реализация и связи
+RAS <|.. BOW
+RAS <|.. MAGIC
+RAS <|.. CROSS
+CHAR o-- RAS
+
+legend
+|= Цвет |= Тип элемента |
+|<back:#b5beeb>   | Интерфейсы и абстрактные классы |
+|<back:#4dd191>   | Базовые классы |
+|<back:#98FB98>   | Конкретные стратегии |
+endlegend
+
+@enduml
