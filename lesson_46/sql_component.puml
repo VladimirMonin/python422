@@ -1,0 +1,87 @@
+@startuml
+
+scale 500 width
+skinparam BackgroundColor f0faf5
+skinparam TitleFontColor  0b2e1d
+
+'Настройки для компонентов
+skinparam ComponentBackgroundColor #F0FFF0
+skinparam ComponentBorderColor #294f3d
+skinparam ComponentFontColor #0b2e1d
+skinparam ComponentBorderThickness 2
+skinparam ComponentFontSize 13
+skinparam ComponentFontStyle bold
+
+title "Архитектура взаимодействия с SQLite"
+
+package "Высокий уровень (Приложения)" {
+    [Django ORM] as orm #4dd191
+    [SQLiteStudio] as studio #4dd191
+    note right of orm
+        - Абстракция для работы с БД
+        - Models, QuerySets, Managers
+        - Миграции
+        - Валидация данных
+    end note
+    note right of studio
+        - GUI для работы с SQLite
+        - Визуальный редактор запросов
+        - Управление структурой БД
+        - Импорт/экспорт данных
+    end note
+}
+
+package "Средний уровень" {
+    [Django DB Backend] as backend #e3c764
+    [SQLiteStudio Core] as studio_core #e3c764
+    note right of backend
+        - Адаптер для конкретной БД
+        - Трансляция ORM в SQL
+        - Управление соединениями
+    end note
+    note right of studio_core
+        - Логика работы с БД
+        - Парсинг и выполнение SQL
+        - Управление подключениями
+    end note
+}
+
+package "Низкий уровень" {
+    [Python SQLite3 Driver] as driver #b5beeb
+    [SQLiteStudio Driver] as studio_driver #b5beeb
+    note right of driver
+        - Python API для SQLite
+        - Прямые SQL запросы
+        - Управление транзакциями
+    end note
+    note right of studio_driver
+        - C++ API для SQLite
+        - Прямой доступ к БД
+        - Управление транзакциями
+    end note
+
+    [SQLite Engine] as engine #98FB98
+    note right of engine
+        - Ядро SQLite
+        - Файловая БД
+        - SQL процессор
+    end note
+}
+
+orm --> backend : Использует
+backend --> driver : Вызывает
+driver --> engine : Взаимодействует
+
+studio --> studio_core : Использует
+studio_core --> studio_driver : Вызывает
+studio_driver --> engine : Взаимодействует
+
+legend
+|= Цв. |= Уровень компонента |
+|<back:#4dd191>         | Высокоуровневые приложения |
+|<back:#e3c764>         | Промежуточный слой |
+|<back:#b5beeb>         | Драйверы SQLite |
+|<back:#98FB98>         | Низкоуровневый движок |
+endlegend
+
+@enduml

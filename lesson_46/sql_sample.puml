@@ -1,0 +1,111 @@
+@startuml
+
+scale 500 width
+skinparam BackgroundColor f0faf5
+skinparam TitleFontColor  0b2e1d
+
+'Настройки для классов
+skinparam ClassBackgroundColor #F0FFF0
+skinparam ClassBorderColor #294f3d
+skinparam ClassFontColor #0b2e1d
+
+title "Структура базы данных блога"
+
+class User #4dd191 {
+    + id: Integer (PK)
+    + username: String
+    + email: String
+    + password_hash: String
+    + created_at: DateTime
+    + is_active: Boolean
+    + role: Enum
+    --
+    + posts: List[Post]
+    + comments: List[Comment]
+}
+
+class Post #4dd191 {
+    + id: Integer (PK)
+    + title: String
+    + slug: String
+    + content: Text
+    + created_at: DateTime
+    + updated_at: DateTime
+    + status: Enum
+    + views_count: Integer
+    --
+    + author: User (FK)
+    + category: Category (FK)
+    + tags: List[Tag]
+    + comments: List[Comment]
+}
+
+class Category #e3c764 {
+    + id: Integer (PK)
+    + name: String
+    + slug: String
+    + description: Text
+    + parent_id: Integer (FK)
+    --
+    + posts: List[Post]
+    + children: List[Category]
+}
+
+class Tag #e3c764 {
+    + id: Integer (PK)
+    + name: String
+    + slug: String
+    --
+    + posts: List[Post]
+}
+
+class Comment #98FB98 {
+    + id: Integer (PK)
+    + content: Text
+    + created_at: DateTime
+    + is_approved: Boolean
+    --
+    + author: User (FK)
+    + post: Post (FK)
+    + parent_comment: Comment (FK)
+}
+
+class PostTag #b5beeb {
+    + post_id: Integer (PK, FK)
+    + tag_id: Integer (PK, FK)
+    --
+    + created_at: DateTime
+}
+
+User "1" -- "0..*" Post : создает >
+Post "0..*" -- "1" Category : принадлежит >
+Post "0..*" -- "0..*" Tag : имеет >
+Post "1" -- "0..*" Comment : содержит >
+User "1" -- "0..*" Comment : пишет >
+Comment "0..1" -- "0..*" Comment : отвечает на >
+
+PostTag .. Post
+PostTag .. Tag
+
+note right of User
+    Пользователи системы:
+    - Администраторы
+    - Авторы
+    - Читатели
+end note
+
+note right of Post
+    Основная сущность блога
+    с поддержкой черновиков
+    и управлением статусом
+end note
+
+legend
+|= Цв. |= Тип сущности |
+|<back:#4dd191>         | Основные сущности |
+|<back:#e3c764>         | Категоризация |
+|<back:#98FB98>         | Взаимодействие |
+|<back:#b5beeb>         | Связующие таблицы |
+endlegend
+
+@enduml
