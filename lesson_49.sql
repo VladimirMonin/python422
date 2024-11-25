@@ -128,3 +128,11 @@ ORDER BY total_heroes DESC
 
 -- Попробуйте сделать JOIN всех таблиц и посмотреть на результат.
 -- mc.name, mc.appearances, e.color, h.color, s.status, a.name, i.identity
+
+SELECT mc.name as hero_name, mc.appearances, e.color, h.color, s.status, a.name, i.identity
+FROM MarvelCharacters AS mc
+JOIN EyeColor AS e ON mc.eye_id = e.eye_id
+JOIN HairColor AS h ON mc.hair_id = h.hair_id
+JOIN LivingStatus AS s ON mc.status_id = s.status_id
+JOIN Alignment AS a ON mc.align_id = a.align_id
+JOIN Identity AS i ON mc.identity_id = i.identity_id
