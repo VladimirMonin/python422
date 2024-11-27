@@ -1,0 +1,28 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "blog",
+      "database": "${workspaceFolder:python422}/lesson_46/blog.db"
+    },
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "database": "${workspaceFolder:python422}/dataset/marvel_not_normal.db",
+      "name": "marvel_nm"
+    },
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "database": "${workspaceFolder:python422}/dataset/marvel_normal.db",
+      "name": "marvel_n"
+    },
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "lesson_50",
+      "database": "${workspaceFolder:python422}/dataset/lesson_50.db"
+    }
+  ]
+}

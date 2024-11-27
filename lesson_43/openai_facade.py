@@ -12,7 +12,7 @@ from typing import Optional
 
 @dataclass
 class OpenAISettings:
-    api_key: str = "КЛЮЧ"
+    api_key: str = "sk-or-vv-32acad84830483432df6bb1eb3114ede486fe620ba237c07f152b84c6a27e782"
     base_url: str = "https://api.vsegpt.ru/v1"
     model: str = "openai/gpt-4o-mini"
     temperature: float = 1.0

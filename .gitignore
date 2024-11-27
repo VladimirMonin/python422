@@ -8,3 +8,5 @@ data/lesson_24.json
 weather_api.py
 data/lesson_24.csv
 download/
+hw/review_report.md
+lesson_43/openai_facade.py
